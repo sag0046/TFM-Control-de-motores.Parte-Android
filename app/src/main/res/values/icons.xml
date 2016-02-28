@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fa_play">&#xf04b;</string>
+    <string name="fa_stop">&#xf04d;</string>
+    <string name="fa_bt">&#xf293;</string>
+    <string name="fa_on">&#xf011;</string>
+</resources>
