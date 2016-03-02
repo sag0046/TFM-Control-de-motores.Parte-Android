@@ -21,28 +21,60 @@
         android:onClick="lanzarBT"
         android:layout_gravity="center_horizontal" />
 
+    <!--VELOCIDAD DE REFERENCIA PARA AMBOS ALGORITMOS -->
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="40dp"></TableRow>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1">
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/algoritmos"
-        android:id="@+id/lblAlgoritmos"/>
+        android:text="@string/velocidad"
+        android:id="@+id/lblVelocidad" />
 
-    <RadioGroup android:id="@+id/GrbGrupo1"
+    <EditText
+        android:layout_width="40sp"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:id="@+id/txtVelocidad" />
+    </LinearLayout>
+
+    <!--Eleccion de algoritmo -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/algoritmos"
+        android:textSize="20sp"
+        android:id="@+id/lblAlgoritmos"/>
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="40dp"></TableRow>
+
+     <RadioGroup android:id="@+id/GrbGrupo1"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <RadioButton
+      <RadioButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="elegirAlgoritmo"
-        android:text="@string/proporcional"
+        android:text="Accion Proporcional"
         android:id="@+id/rdProporcional"
         android:checked="true"/>
 
 
-    <LinearLayout
+      <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -52,33 +84,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/velocidad"
-            android:id="@+id/lblVelocidadP" />
-
-        <EditText
-            android:layout_width="70sp"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:id="@+id/txtVelocidadP" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/constante"
             android:id="@+id/lblConstanteP" />
 
         <EditText
-            android:layout_width="60sp"
+            android:layout_width="40sp"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
-            android:id="@+id/txtConstanteP"
-            android:layout_weight="0.12" />
-    </LinearLayout>
+            android:id="@+id/txtConstanteP" />
+       </LinearLayout>
 
 
 
-    <RadioButton
+     <RadioButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/integral"
@@ -94,25 +112,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/velocidad"
-                android:id="@+id/lblVelocidadPI" />
-
-            <EditText
-                android:layout_width="60sp"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                android:enabled="false"
-                android:id="@+id/txtVelocidadPI" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="@string/constante"
                 android:id="@+id/lblConstantePI" />
 
             <EditText
-                android:layout_width="60sp"
+                android:layout_width="40sp"
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
                 android:enabled="false"
@@ -126,7 +130,7 @@
                 android:id="@+id/lblTiempo" />
 
             <EditText
-                android:layout_width="60sp"
+                android:layout_width="40sp"
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
                 android:enabled="false"
@@ -135,7 +139,7 @@
         </LinearLayout>
     </RadioGroup>
 
-
+    <!--PLAY & STOP -->
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -153,6 +157,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_weight="1"
+            android:layout_gravity="bottom"
             android:text="@string/fa_play" />
 
         <Button
@@ -160,6 +165,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_weight="1"
+            android:layout_gravity="bottom"
             android:text="@string/fa_stop" />
 
     </LinearLayout>

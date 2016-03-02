@@ -1,11 +1,11 @@
 <resources>
     <string name="app_name">PIapp</string>
-    <string name="algoritmos">Algoritmos</string>
-    <string name="proporcional">Proporcional</string>
-    <string name="velocidad">Velocidad</string>
-    <string name="constante">K</string>
-    <string name="tiempo">Tiempo</string>
-    <string name="integral">Integral</string>
+    <string name="algoritmos">Algoritmos de Control</string>
+    <string name="proporcional">Accion Proporcional</string>
+    <string name="velocidad">Velocidad de Referencia(rpm)</string>
+    <string name="constante">Ganancia Proporcional</string>
+    <string name="tiempo">T.Integral(s-1)</string>
+    <string name="integral">Accion Integral</string>
     <string name="imposible_to_connect">Imposible conectar con el dispositivo</string>
     <string name="lost_connection">Perdida conexión con el dispositivo</string>
     <string name="scanning">Escaneando dispositivos...</string>

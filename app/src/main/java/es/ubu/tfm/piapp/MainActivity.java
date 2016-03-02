@@ -12,7 +12,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     // Debugging
-    private static final String TAG = "UbuBot";
+    private static final String TAG = "PIapp";
     private static final boolean D = true;
 
     // Codigos de solicitud de Intent
@@ -59,22 +59,21 @@ public class MainActivity extends AppCompatActivity {
         toast1.show();*/
         switch(v.getId()) {
             case R.id.rdIntegral:
-                findViewById(R.id.txtVelocidadPI).setEnabled(true);
+                findViewById(R.id.txtVelocidad).setEnabled(true);
                 findViewById(R.id.txtConstantePI).setEnabled(true);
                 findViewById(R.id.txtTiempo).setEnabled(true);
-                findViewById(R.id.txtVelocidadP).setEnabled(false);
+
                 findViewById(R.id.txtConstanteP).setEnabled(false);
-                ((EditText)findViewById(R.id.txtVelocidadP)).setText("");
                 ((EditText)findViewById(R.id.txtConstanteP)).setText("");
                 break;
+
             case R.id.rdProporcional:
-                findViewById(R.id.txtVelocidadPI).setEnabled(false);
-                findViewById(R.id.txtVelocidadPI).setEnabled(false);
-                findViewById(R.id.txtTiempo).setEnabled(false);
-                findViewById(R.id.txtVelocidadP).setEnabled(true);
+                findViewById(R.id.txtVelocidad).setEnabled(true);
                 findViewById(R.id.txtConstanteP).setEnabled(true);
-                ((EditText)findViewById(R.id.txtVelocidadPI)).setText("");
-                ((EditText)findViewById(R.id.txtVelocidadPI)).setText("");
+
+                findViewById(R.id.txtTiempo).setEnabled(false);
+                findViewById(R.id.txtConstantePI).setEnabled(false);
+                ((EditText)findViewById(R.id.txtConstantePI)).setText("");
                 ((EditText)findViewById(R.id.txtTiempo)).setText("");
                 break;
         }
