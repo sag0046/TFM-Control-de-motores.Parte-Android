@@ -1,17 +1,18 @@
 package es.ubu.tfm.piapp;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    // Debugging
     private static final String TAG = "PIapp";
     private static final boolean D = true;
 
@@ -26,16 +27,14 @@ public class MainActivity extends AppCompatActivity {
     public static final int MESSAGE_DEVICE_NAME = 3;
     public static final int MESSAGE_TOAST = 4;
 
-    // Codigos para movimientos
-    public static final int MOVE_STOP = 1;
-    public static final int MOVE_DOWN = 2;
-    public static final int MOVE_UP = 3;
-    public static final int MOVE_LEFT = 4;
-    public static final int MOVE_RIGHT = 5;
-
     // Nombres de claves recibidas desde el Handler de BluetoothService
     public static final String DEVICE_NAME = "device_name";
     public static final String TOAST = "toast";
+
+
+    private BluetoothService mService = null;
+    private BluetoothAdapter mBluetoothAdapter = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +43,44 @@ public class MainActivity extends AppCompatActivity {
         Typeface iconFont = FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME);
         FontManager.markAsIconContainer(findViewById(R.id.icons_container), iconFont);
         FontManager.markAsIconContainer(findViewById(R.id.btnBt), iconFont);
+
+        // Obtenemos el adaptador Bluetooth
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        // Si el Bluetooth no está activo, requiere su activación.
+        if (!mBluetoothAdapter.isEnabled()) {
+            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+            // En otro caso, iniciamos
+        } else {
+            if (mService == null) startBluetoothService();
+        }
     }
+
+    private void startBluetoothService() {
+        // Inicializamos el BluetoothService para poder realizar las conexiones de bluetooth.
+        mService = new BluetoothService(this, mHandler);
+    }
+
+
+    private String mConnectedDeviceName = null;
+
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                // Nombre del dispositivo conectado
+                case MESSAGE_DEVICE_NAME:
+                    // Guardamos el nombre del dispositivo con el que estamos conectados
+                    mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
+                    Toast.makeText(getApplicationContext(), "tatata" + " " + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
+                    break;
+                // Mensaje a mostrar al usuario
+                case MESSAGE_TOAST:
+                    Toast.makeText(getApplicationContext(), getString((int) msg.getData().getLong(TOAST)), Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    };
 
     public void lanzarBT(View v) {
         Intent i = new Intent(this, BluetoothActivity.class );

@@ -12,7 +12,7 @@
     <string name="selection">Seleccione un dispositivo para conectarse</string>
     <string name="not_paired">Ningun dispositivo ha sido emparejado</string>
     <string name="not_discovered">No se ha encontrado ningun dispositivo</string>
-    <string name="devices_paired">Dispositivos emparejados</string>
     <string name="other_devices">Otros dispositivos disponibles</string>
-    <string name="scan">Escanear dispositivos</string>
+    <string name="dencontrados">Dispositivos encontrados:</string>
+    <string name="demparejados">Dispositivos emparejados:</string>
 </resources>

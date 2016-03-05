@@ -7,15 +7,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/btnActivar"
-        android:text="@string/fa_on"
-        android:textSize="60sp"
+        android:text="@string/fa_search"
+        android:background="@android:color/transparent"
         android:textColor="#9b59b6"
+        android:textSize="60sp"
         android:layout_gravity="center_horizontal" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Small Text"
+        android:text="@string/demparejados"
         android:id="@+id/lbldispositivosEmparejados" />
 
     <ListView
@@ -27,7 +28,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Small Text"
+        android:text="@string/dencontrados"
+        android:visibility="invisible"
         android:id="@+id/lblnuevosDispositivos" />
 
     <ListView

@@ -8,7 +8,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -18,19 +21,35 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
 
 /**
  * Created by Sandra on 28/02/2016.
  */
 public class BluetoothActivity extends Activity {
 
+    // Codigos de solicitud de Intent
+    private static final int REQUEST_CONNECT_DEVICE = 1;
+    private static final int REQUEST_ENABLE_BT = 2;
+    private static final int REQUEST_POINT = 3;
+
+    // Tipos de mensajes enviados desde el Handler de BluetoothService
+    public static final int MESSAGE_STATE_CHANGE = 1;
+    public static final int MESSAGE_READ = 2;
+    public static final int MESSAGE_DEVICE_NAME = 3;
+    public static final int MESSAGE_TOAST = 4;
+
+
+    private BluetoothService mService = null; //servicio BT
+    private BluetoothAdapter mBluetoothAdapter = null;
 
     private static final String TAG = "DeviceListActivity";
     private static final boolean D = true;
+
     public static String EXTRA_DEVICE_ADDRESS = "device_address";
-    private BluetoothAdapter mBtAdapter;
-    private ArrayAdapter<String> mPairedDevicesArrayAdapter;
-    private ArrayAdapter<String> mNewDevicesArrayAdapter;
+    private BluetoothAdapter mBtAdapter; //adpatador BT
+    private ArrayAdapter<String> mPairedDevicesArrayAdapter; // disposritivos emparejados
+    private ArrayAdapter<String> mNewDevicesArrayAdapter; //nuevos dispositivos.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +59,19 @@ public class BluetoothActivity extends Activity {
         setContentView(R.layout.bt_activity);
         // Ponemos el resultado CANCELED en caso de que el usuario vuelva hacia atras
         setResult(Activity.RESULT_CANCELED);
+        Typeface iconFont = FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME);
+        FontManager.markAsIconContainer(findViewById(R.id.icons_container), iconFont);
+        FontManager.markAsIconContainer(findViewById(R.id.btnActivar), iconFont);
+
+
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (!mBluetoothAdapter.isEnabled()) {
+            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+
+        } else {
+            if (mService == null) startBluetoothService();
+        }
 
         // Inicializamos el boton qe permite descubrir nuevos dispositivos
         Button scanButton = (Button) findViewById(R.id.btnActivar);
@@ -64,14 +96,12 @@ public class BluetoothActivity extends Activity {
         newDevicesListView.setAdapter(mNewDevicesArrayAdapter);
         newDevicesListView.setOnItemClickListener(mDeviceClickListener);
 
-
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         this.registerReceiver(mReceiver, filter);
 
 
         filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
         this.registerReceiver(mReceiver, filter);
-
 
         mBtAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -90,6 +120,34 @@ public class BluetoothActivity extends Activity {
         }
     }
 
+    private void startBluetoothService() {
+        mService = new BluetoothService(this, mHandler);
+    }
+
+    private String mConnectedDeviceName = null;
+
+
+    public static final String DEVICE_NAME = "device_name";
+    public static final String TOAST = "toast";
+
+
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+
+                case MESSAGE_DEVICE_NAME:
+
+                    mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
+                    Toast.makeText(getApplicationContext(), "tatata" + " " + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
+                    break;
+                case MESSAGE_TOAST:
+                    Toast.makeText(getApplicationContext(), getString((int) msg.getData().getLong(TOAST)), Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    };
+
     /**
      * onDestroy.
      */
@@ -97,11 +155,9 @@ public class BluetoothActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
 
-
         if (mBtAdapter != null) {
             mBtAdapter.cancelDiscovery();
         }
-
         this.unregisterReceiver(mReceiver);
     }
 
@@ -113,13 +169,11 @@ public class BluetoothActivity extends Activity {
         setProgressBarIndeterminateVisibility(true);
         setTitle(R.string.scanning);
 
-
         findViewById(R.id.lblnuevosDispositivos).setVisibility(View.VISIBLE);
 
         if (mBtAdapter.isDiscovering()) {
             mBtAdapter.cancelDiscovery();
         }
-
 
         mBtAdapter.startDiscovery();
     }
@@ -129,7 +183,6 @@ public class BluetoothActivity extends Activity {
         public void onItemClick(AdapterView<?> av, View v, int arg2, long arg3) {
 
             mBtAdapter.cancelDiscovery();
-
 
             String info = ((TextView) v).getText().toString();
             String address = info.substring(info.length() - 17);
@@ -150,7 +203,6 @@ public class BluetoothActivity extends Activity {
         public void onReceive(Context context, Intent intent) {
             // Obtenemos la acción
             String action = intent.getAction();
-
 
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
