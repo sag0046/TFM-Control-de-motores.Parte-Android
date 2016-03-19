@@ -15,6 +15,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -27,29 +28,16 @@ import android.widget.Toast;
  * Created by Sandra on 28/02/2016.
  */
 public class BluetoothActivity extends Activity {
-
-    // Codigos de solicitud de Intent
-    private static final int REQUEST_CONNECT_DEVICE = 1;
-    private static final int REQUEST_ENABLE_BT = 2;
-    private static final int REQUEST_POINT = 3;
-
-    // Tipos de mensajes enviados desde el Handler de BluetoothService
-    public static final int MESSAGE_STATE_CHANGE = 1;
-    public static final int MESSAGE_READ = 2;
-    public static final int MESSAGE_DEVICE_NAME = 3;
-    public static final int MESSAGE_TOAST = 4;
-
-
-    private BluetoothService mService = null; //servicio BT
-    private BluetoothAdapter mBluetoothAdapter = null;
-
-    private static final String TAG = "DeviceListActivity";
+    // Debugging
+    private static final String TAG = "DeviceListActivity";//modificar
     private static final boolean D = true;
 
+    // Retorno extra del Intent
     public static String EXTRA_DEVICE_ADDRESS = "device_address";
-    private BluetoothAdapter mBtAdapter; //adpatador BT
-    private ArrayAdapter<String> mPairedDevicesArrayAdapter; // disposritivos emparejados
-    private ArrayAdapter<String> mNewDevicesArrayAdapter; //nuevos dispositivos.
+
+    private BluetoothAdapter mBtAdapter;//adaptador BT
+    private ArrayAdapter<String> mPairedDevicesArrayAdapter;//Array disp emparejados
+    private ArrayAdapter<String> mNewDevicesArrayAdapter; //Array disp nuevos
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,16 +50,18 @@ public class BluetoothActivity extends Activity {
         Typeface iconFont = FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME);
         FontManager.markAsIconContainer(findViewById(R.id.icons_container), iconFont);
         FontManager.markAsIconContainer(findViewById(R.id.btnActivar), iconFont);
-
-
+/*
+        // Obtenemos el adaptador Bluetooth
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        // Si el Bluetooth no está activo, requiere su activación.
+        // start() sera llamado en onActivityResult
         if (!mBluetoothAdapter.isEnabled()) {
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-
+            // En otro caso, iniciamos
         } else {
             if (mService == null) startBluetoothService();
-        }
+        }*/
 
         // Inicializamos el boton qe permite descubrir nuevos dispositivos
         Button scanButton = (Button) findViewById(R.id.btnActivar);
@@ -82,116 +72,131 @@ public class BluetoothActivity extends Activity {
             }
         });
 
-
+        // Inicializamos los arrays de los dispositivos
         mPairedDevicesArrayAdapter = new ArrayAdapter<String>(this, R.layout.device_name);
         mNewDevicesArrayAdapter = new ArrayAdapter<String>(this, R.layout.device_name);
 
-
+        // Buscamos y establecemos el listener para los item del ListView
+        // para los DISPOSITIVOS EMPAREJADOS
         ListView pairedListView = (ListView) findViewById(R.id.dispositivosEmparejados);
         pairedListView.setAdapter(mPairedDevicesArrayAdapter);
         pairedListView.setOnItemClickListener(mDeviceClickListener);
 
-
+        // Buscamos y establecemos el listener para los item del ListView
+        // para los NUEVOS DISPOSITIVOS ENCONTRADOS
         ListView newDevicesListView = (ListView) findViewById(R.id.nuevosDispositivos);
         newDevicesListView.setAdapter(mNewDevicesArrayAdapter);
         newDevicesListView.setOnItemClickListener(mDeviceClickListener);
 
+        // Registra el broadcasts cuando un dispositivo nuevo es encontrado
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         this.registerReceiver(mReceiver, filter);
 
-
+        // Registra el broadcasts cuando ha finalizado la busqueda
         filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
         this.registerReceiver(mReceiver, filter);
 
+        // Obtenemos el adaptador Bluetooth
         mBtAdapter = BluetoothAdapter.getDefaultAdapter();
 
-
+        // Obtenemos los dispositivos emparejados
         Set<BluetoothDevice> pairedDevices = mBtAdapter.getBondedDevices();
 
-
+        // Si hay dispositivos emparejados se añade cada uno de ellos al arrayAdapter
         if (pairedDevices.size() > 0) {
             findViewById(R.id.lbldispositivosEmparejados).setVisibility(View.VISIBLE);
             for (BluetoothDevice device : pairedDevices) {
                 mPairedDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
             }
         } else {
-            String noDevices = getResources().getText(R.string.not_paired).toString();
+            String noDevices = getResources().getText(R.string.no_emparejados).toString();
             mPairedDevicesArrayAdapter.add(noDevices);
         }
     }
 
+    /*
     private void startBluetoothService() {
+        // Inicializamos el BluetoothService para poder realizar las conexiones de bluetooth.
         mService = new BluetoothService(this, mHandler);
-    }
+    }*/
 
-    private String mConnectedDeviceName = null;
+    //private String mConnectedDeviceName = null;
 
+    // Nombres de claves recibidas desde el Handler de BluetoothService
+    //public static final String DEVICE_NAME = "device_name";
+    //public static final String TOAST = "toast";
 
-    public static final String DEVICE_NAME = "device_name";
-    public static final String TOAST = "toast";
-
-
+    /**
+     *  Handler que recibe la información de BluetoothService
+     *//*
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-
+                // Nombre del dispositivo conectado
                 case MESSAGE_DEVICE_NAME:
-
+                    // Guardamos el nombre del dispositivo con el que estamos conectados
                     mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
                     Toast.makeText(getApplicationContext(), "tatata" + " " + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
                     break;
+                // Mensaje a mostrar al usuario
                 case MESSAGE_TOAST:
                     Toast.makeText(getApplicationContext(), getString((int) msg.getData().getLong(TOAST)), Toast.LENGTH_SHORT).show();
                     break;
             }
         }
-    };
+    };*/
 
-    /**
-     * onDestroy.
-     */
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
+        // Nos aseguramos de que no estamos haciendo mas busquedas
         if (mBtAdapter != null) {
             mBtAdapter.cancelDiscovery();
         }
+
+        // Desregistramos el broadcast listeners
         this.unregisterReceiver(mReceiver);
     }
 
-
+    //Empieza el descubrimiento de dispositivos con el adaptador Bluetooth.
     private void doDiscovery() {
         if (D) Log.d(TAG, "doDiscovery()");
 
-
+        // Cambiamos el titulo a escaneando
         setProgressBarIndeterminateVisibility(true);
         setTitle(R.string.scanning);
 
+        // Habilitamos la visibilidad del sub-titulo de nuevos dispositivos
         findViewById(R.id.lblnuevosDispositivos).setVisibility(View.VISIBLE);
 
+        // Si estaba ya buscando, paramos esto
         if (mBtAdapter.isDiscovering()) {
             mBtAdapter.cancelDiscovery();
         }
 
+        // Petición de descubrimiento de Bluetooth Adapter, es decir, buscamos.
         mBtAdapter.startDiscovery();
     }
 
 
+      //onClickListener para todos los disp. en el listView
     private OnItemClickListener mDeviceClickListener = new OnItemClickListener() {
         public void onItemClick(AdapterView<?> av, View v, int arg2, long arg3) {
-
+            // Cancelamos el descubrimiento porque es costosa y estamos a punto de conectar
             mBtAdapter.cancelDiscovery();
 
+            // Obtenemos la dirección MAC del dispositivo que son los ultimos 17 caracteres de la Vista
             String info = ((TextView) v).getText().toString();
             String address = info.substring(info.length() - 17);
 
-
+            // Creamos el Intent resultante y añadimos la dirección MAC
             Intent intent = new Intent();
             intent.putExtra(EXTRA_DEVICE_ADDRESS, address);
 
-
+            // Ponemos el resultado a OK y finalizamos la Activity
             setResult(Activity.RESULT_OK, intent);
             finish();
         }
@@ -204,19 +209,22 @@ public class BluetoothActivity extends Activity {
             // Obtenemos la acción
             String action = intent.getAction();
 
+            // Cuando se descubre un dispositivo
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                // Obtenemos el objeto BluetoothDevice del Intent
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                // Si ya esta emparejado, evitarlo, porque ha sido ya publicado
                 if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
                     mNewDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
                 }
 
-
+                // Cuando la busqueda finaliza cambiamos el titulo
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 setProgressBarIndeterminateVisibility(false);
-                setTitle(R.string.selection);
-
+                setTitle(R.string.seleccionar_dispositivo);
+                // Comprobamos si habia nuevos dispositivos
                 if (mNewDevicesArrayAdapter.getCount() == 0) {
-                    String noDevices = getResources().getText(R.string.not_discovered).toString();
+                    String noDevices = getResources().getText(R.string.no_encontrado).toString();
                     mNewDevicesArrayAdapter.add(noDevices);
                 }
             }

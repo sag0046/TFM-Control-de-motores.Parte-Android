@@ -9,9 +9,9 @@
     <string name="imposible_to_connect">Imposible conectar con el dispositivo</string>
     <string name="lost_connection">Perdida conexión con el dispositivo</string>
     <string name="scanning">Escaneando dispositivos...</string>
-    <string name="selection">Seleccione un dispositivo para conectarse</string>
-    <string name="not_paired">Ningun dispositivo ha sido emparejado</string>
-    <string name="not_discovered">No se ha encontrado ningun dispositivo</string>
+    <string name="seleccionar_dispositivo">Seleccione un dispositivo para conectarse</string>
+    <string name="no_emparejados">Ningun dispositivo ha sido emparejado</string>
+    <string name="no_encontrado">No se ha encontrado ningun dispositivo</string>
     <string name="other_devices">Otros dispositivos disponibles</string>
     <string name="dencontrados">Dispositivos encontrados:</string>
     <string name="demparejados">Dispositivos emparejados:</string>
