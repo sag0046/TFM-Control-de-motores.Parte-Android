@@ -15,4 +15,16 @@
     <string name="other_devices">Otros dispositivos disponibles</string>
     <string name="dencontrados">Dispositivos encontrados:</string>
     <string name="demparejados">Dispositivos emparejados:</string>
+    <string name="no_vel">Introduzca una velocidad valida</string>
+    <string name="no_kp">Introduzca una constante valida</string>
+    <string name="no_kpi">Introduzca una constante valida</string>
+    <string name="no_t">Introduzca una tiempo valido</string>
+    <string name="velocidadIncorrecta">Velocidad entre 0 y 255</string>
+    <string name="kPincorrecta">Constante K entre 0 y 255</string>
+    <string name="kPIincorrecta">Constante K entre 0 y 255</string>
+    <string name="tiempoIncorrecta">Tiempo entre 0 y 255</string>
+
+
+
+
 </resources>

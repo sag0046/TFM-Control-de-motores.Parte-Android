@@ -158,6 +158,7 @@
             android:gravity="center"
             android:layout_weight="1"
             android:layout_gravity="bottom"
+            android:id="@+id/play"
             android:text="@string/fa_play" />
 
         <Button
@@ -166,6 +167,7 @@
             android:gravity="center"
             android:layout_weight="1"
             android:layout_gravity="bottom"
+            android:id="@+id/stop"
             android:text="@string/fa_stop" />
 
     </LinearLayout>
