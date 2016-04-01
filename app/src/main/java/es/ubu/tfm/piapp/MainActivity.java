@@ -14,7 +14,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import java.io.UnsupportedEncodingException;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -53,6 +57,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //Adapatdor BT
     private BluetoothAdapter mBluetoothAdapter = null;
 
+    private RadioGroup radioGroupMio;
+    private RadioButton radioButtonMio;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button btnStop = (Button)findViewById(R.id.stop);
 
         btnPlay.setOnClickListener(this);
+        btnStop.setOnClickListener(this);//*****************************************************************************
 
 
             /*@Override
@@ -167,6 +176,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //Check para elegir un algoritmo
     public void elegirAlgoritmo(View v) {
        /* Toast toast1 =
+
                 Toast.makeText(getApplicationContext(),
                         "Toast por defecto", Toast.LENGTH_SHORT);
 
@@ -232,9 +242,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void move (int movement){
+        radioGroupMio = (RadioGroup) findViewById(R.id.GrbGrupo1);
+
+        // get selected radio button from radioGroup
+        int selectedId = radioGroupMio.getCheckedRadioButtonId();
+
+        // find the radiobutton by returned id
+        //radioButtonMio = (RadioButton) findViewById(selectedId);
+
         switch (movement){
             case (MOVE_PLAY):
-                seleccionAlgoritmo(R.id.rdProporcional);
+                seleccionAlgoritmo(selectedId);
                 break;
             case (MOVE_STOP):
                 break;
@@ -245,10 +263,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (algoritmo){
             case R.id.rdProporcional:
+                Toast toast32 =
+                        Toast.makeText(getApplicationContext(),
+                                " algoritmo 1", Toast.LENGTH_SHORT);
+
+                toast32.show();
                 algoritmoProporcional();
                 break;
             case R.id.rdIntegral:
+                Toast toast33 =
+                        Toast.makeText(getApplicationContext(),
+                                "algoritmo 2", Toast.LENGTH_SHORT);
+
+                toast33.show();
                 algoritmoIntegral();
+                break;
         }
     }
 
@@ -283,20 +312,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        message = passToString(speed) + passToString(k_P) + passToString(500);
+        message = "PP" + passToString(speed) + passToString(k_P) /*+ passToString(500)*/;
         //message = "0000,0000";
 
         // Obtenemos la cadena de bytes a enviar
         byte[] send = message.getBytes();
 
+        String parte1 = "PP";
+
+        // Obtenemos la cadena de bytes a enviar
+        byte[] send2 = new byte[0];
+        try {
+            send2 = parte1.getBytes("ASCII");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String str="";
+
+        try {
+            str = new String(send, "ASCII"); // for UTF-8 encoding
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
         Toast toast1 =
                 Toast.makeText(getApplicationContext(),
-                        send.toString(), Toast.LENGTH_SHORT);
+                        send.toString()+ " parte 1: "+ str, Toast.LENGTH_SHORT);
 
         toast1.show();
 
         // Enviamos el mensaje
-        //mService.write(send);
+        mService.write(send);
     }
 
     private void algoritmoIntegral() {
@@ -346,7 +392,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        message = passToString(speed) + passToString(k_PI) + passToString(t);
+        message = "PI" +passToString(speed) + passToString(k_PI) + passToString(t);
         //message = "0000,0000";
 
         // Obtenemos la cadena de bytes a enviar
@@ -359,7 +405,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         toast1.show();
 
         // Enviamos el mensaje
-        //mService.write(send);
+        mService.write(send);
     }
 
 
@@ -397,8 +443,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(getApplicationContext(), getString((int) msg.getData().getLong(TOAST)), Toast.LENGTH_SHORT).show();
                     break;
                 case MESSAGE_READ:
-                    int bytes = msg.arg1;
-                    Toast.makeText(getApplicationContext(), "bytes" + " " + bytes, Toast.LENGTH_SHORT).show();
+                    //int bytes = msg.arg1;
+                    // Obtenemos la cadena de bytes recibidos
+                    byte[] readBuf = (byte[]) msg.obj;
+                    // Pasamos a string
+                    String readMessage = new String(readBuf, 0, msg.arg1);
+
+                    Toast.makeText(getApplicationContext(), "bytes salida" + " " + readMessage, Toast.LENGTH_SHORT).show();
                     break;
             }
         }

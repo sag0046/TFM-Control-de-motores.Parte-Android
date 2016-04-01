@@ -169,8 +169,7 @@ public class BluetoothService {
         restart();
     }
 
-
-     //Este hilo se ejecuta al intentar realizar una conexión de salida con un dispositivo.
+    //Este hilo se ejecuta al intentar realizar una conexión de salida con un dispositivo.
     private class ConnectThread extends Thread {
         private final BluetoothSocket mmSocket;
         private final BluetoothDevice mmDevice; //dispositivo BT
