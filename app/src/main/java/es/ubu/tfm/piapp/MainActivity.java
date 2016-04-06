@@ -69,6 +69,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Typeface iconFont = FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME);
         FontManager.markAsIconContainer(findViewById(R.id.icons_container), iconFont);
         FontManager.markAsIconContainer(findViewById(R.id.btnBt), iconFont);
+        FontManager.markAsIconContainer(findViewById(R.id.btnGr), iconFont);
+
 
         // Obtenemos el adaptador Bluetooth
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -312,13 +314,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        message = "PP" + passToString(speed) + passToString(k_P) /*+ passToString(500)*/;
+        message = "P" + passToString(speed) + passToString(k_P) /*+ passToString(500)*/;
         //message = "0000,0000";
 
         // Obtenemos la cadena de bytes a enviar
         byte[] send = message.getBytes();
 
-        String parte1 = "PP";
+        /*String parte1 = "P";
 
         // Obtenemos la cadena de bytes a enviar
         byte[] send2 = new byte[0];
@@ -333,11 +335,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             str = new String(send, "ASCII"); // for UTF-8 encoding
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
-        }
+        }*/
 
         Toast toast1 =
                 Toast.makeText(getApplicationContext(),
-                        send.toString()+ " parte 1: "+ str, Toast.LENGTH_SHORT);
+                        send.toString()+ " parte 1: "+ message, Toast.LENGTH_SHORT);
 
         toast1.show();
 
@@ -392,7 +394,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        message = "PI" +passToString(speed) + passToString(k_PI) + passToString(t);
+        message = "I" +passToString(speed) + passToString(k_PI) + passToString(t);
         //message = "0000,0000";
 
         // Obtenemos la cadena de bytes a enviar

@@ -9,17 +9,38 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="es.ubu.tfm.piapp.MainActivity">
-
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:id="@+id/btnNad"
+        android:textSize="50sp"
+        android:textColor="#9b59b6"
+        android:layout_gravity="center_horizontal" />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:id="@+id/btnBt"
         android:text="@string/fa_bt"
-        android:textSize="60sp"
+        android:textSize="50sp"
         android:textColor="#9b59b6"
         android:onClick="lanzarBT"
         android:layout_gravity="center_horizontal" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:id="@+id/btnGr"
+        android:text="@string/fa_bar_chart"
+        android:textSize="50sp"
+        android:textColor="#9b59b6"
+        android:layout_gravity="center_horizontal" /></LinearLayout>
+
 
     <!--VELOCIDAD DE REFERENCIA PARA AMBOS ALGORITMOS -->
 
