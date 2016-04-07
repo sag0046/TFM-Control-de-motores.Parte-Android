@@ -228,8 +228,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //  parará el motor, pero es necesaria cuando de al boton btnStop.
     @Override
     public void onStop() {
-        // Mandamos parar al motor
-        move(MOVE_STOP);
         super.onStop();
         if(D) Log.e(TAG, "-- ON STOP --");
     }
@@ -257,10 +255,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 seleccionAlgoritmo(selectedId);
                 break;
             case (MOVE_STOP):
+                stopMotor();
                 break;
         }
     }
 
+    private void stopMotor() {
+        message = "S";
+        //message = "0000,0000";
+        // Obtenemos la cadena de bytes a enviar
+        byte[] send = message.getBytes();
+        mService.write(send);
+
+    }
     private void seleccionAlgoritmo(int algoritmo) {
 
         switch (algoritmo){
