@@ -11,7 +11,8 @@
     tools:context="es.ubu.tfm.piapp.MainActivity">
 <LinearLayout
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:id="@+id/icons_container2">
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,6 +40,7 @@
         android:text="@string/fa_bar_chart"
         android:textSize="50sp"
         android:textColor="#9b59b6"
+        android:onClick="lanzarGR"
         android:layout_gravity="center_horizontal" /></LinearLayout>
 
 

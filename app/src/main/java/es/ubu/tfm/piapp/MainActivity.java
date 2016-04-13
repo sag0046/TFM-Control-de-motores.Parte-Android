@@ -86,9 +86,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Button btnPlay = (Button)findViewById(R.id.play);
         Button btnStop = (Button)findViewById(R.id.stop);
+       // Button btnGr = (Button)findViewById(R.id.btnGr);
+
+
 
         btnPlay.setOnClickListener(this);
-        btnStop.setOnClickListener(this);//*****************************************************************************
+        btnStop.setOnClickListener(this);
+        //btnGr.setOnClickListener(this);
 
 
             /*@Override
@@ -169,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case (R.id.stop):
                 move(MOVE_STOP);
                 break;
+
         }
         //}
         //return true;
@@ -177,12 +182,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     //Check para elegir un algoritmo
     public void elegirAlgoritmo(View v) {
-       /* Toast toast1 =
-
-                Toast.makeText(getApplicationContext(),
-                        "Toast por defecto", Toast.LENGTH_SHORT);
-
-        toast1.show();*/
         switch(v.getId()) {
             case R.id.rdIntegral:
                 findViewById(R.id.txtVelocidad).setEnabled(true);
@@ -218,6 +217,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivityForResult(i, REQUEST_CONNECT_DEVICE);
     }
 
+    public void lanzarGR() { //**********************************************************************
+        Intent j = new Intent(this, GraphActivity.class );
+        startActivity(j);
+    }
+
+
     @Override
     public synchronized void onPause() {
         super.onPause();
@@ -225,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    //  parará el motor, pero es necesaria cuando de al boton btnStop.
+
     @Override
     public void onStop() {
         super.onStop();
