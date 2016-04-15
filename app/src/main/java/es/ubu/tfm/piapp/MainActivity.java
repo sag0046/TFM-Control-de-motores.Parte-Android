@@ -86,13 +86,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Button btnPlay = (Button)findViewById(R.id.play);
         Button btnStop = (Button)findViewById(R.id.stop);
-       // Button btnGr = (Button)findViewById(R.id.btnGr);
+        Button btnGr = (Button)findViewById(R.id.btnGr);
 
 
 
         btnPlay.setOnClickListener(this);
         btnStop.setOnClickListener(this);
-        //btnGr.setOnClickListener(this);
+        btnGr.setOnClickListener(this);
 
 
             /*@Override
@@ -173,6 +173,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case (R.id.stop):
                 move(MOVE_STOP);
                 break;
+            case (R.id.btnGr):
+                lanzarGR(v);
+                break;
 
         }
         //}
@@ -217,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivityForResult(i, REQUEST_CONNECT_DEVICE);
     }
 
-    public void lanzarGR() { //**********************************************************************
+    public void lanzarGR(View v) { //**********************************************************************
         Intent j = new Intent(this, GraphActivity.class );
         startActivity(j);
     }

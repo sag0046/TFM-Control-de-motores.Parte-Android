@@ -40,7 +40,6 @@
         android:text="@string/fa_bar_chart"
         android:textSize="50sp"
         android:textColor="#9b59b6"
-        android:onClick="lanzarGR"
         android:layout_gravity="center_horizontal" /></LinearLayout>
 
 

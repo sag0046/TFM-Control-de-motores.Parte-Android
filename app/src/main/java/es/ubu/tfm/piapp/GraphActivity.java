@@ -32,7 +32,7 @@ import com.github.mikephil.charting.charts.LineChart;
 /**
  * Created by Sandra on 13/04/2016.
  */
-public class GraphActivity extends Activity implements OnChartValueSelectedListener {
+public class GraphActivity extends Activity {
     private RelativeLayout graphLayout;
     private LineChart mChart;
 
@@ -43,7 +43,7 @@ public class GraphActivity extends Activity implements OnChartValueSelectedListe
         setContentView(R.layout.gr_activity);
         graphLayout = (RelativeLayout) findViewById(R.id.graphLayout);
 
-        mChart = new LineChart(this);
+        /*mChart = new LineChart(this);
 
         graphLayout.addView(mChart);
 
@@ -104,7 +104,7 @@ public class GraphActivity extends Activity implements OnChartValueSelectedListe
 
     }
 
-    private int year = 2015;
+   /* private int year = 2015;
     private  Object[] mMonths;
 
     private void addEntry() {
@@ -143,8 +143,9 @@ public class GraphActivity extends Activity implements OnChartValueSelectedListe
             // AxisDependency.LEFT);
         }
     }
+    */
 
-    private LineDataSet createSet() {
+    /*private LineDataSet createSet() {
 
         LineDataSet set = new LineDataSet(null, "Dynamic Data");
         set.setAxisDependency(AxisDependency.LEFT);
@@ -159,9 +160,9 @@ public class GraphActivity extends Activity implements OnChartValueSelectedListe
         set.setValueTextSize(9f);
         set.setDrawValues(false);
         return set;
-    }
+    }*/
 
-    private void feedMultiple() {
+   /* private void feedMultiple() {
 
         new Thread(new Runnable() {
 
@@ -186,9 +187,9 @@ public class GraphActivity extends Activity implements OnChartValueSelectedListe
                 }
             }
         }).start();
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
         Log.i("Entry selected", e.toString());
     }
@@ -196,5 +197,7 @@ public class GraphActivity extends Activity implements OnChartValueSelectedListe
     @Override
     public void onNothingSelected() {
         Log.i("Nothing selected", "Nothing selected.");
+    }
+    */
     }
 }
