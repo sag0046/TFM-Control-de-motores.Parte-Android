@@ -2,7 +2,9 @@ package es.ubu.tfm.piapp;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.widget.AbsListView;
 import android.widget.RelativeLayout;
+
 
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -32,7 +34,7 @@ import com.github.mikephil.charting.charts.LineChart;
 /**
  * Created by Sandra on 13/04/2016.
  */
-public class GraphActivity extends Activity {
+public class GraphActivity extends Activity implements OnChartValueSelectedListener {
     private RelativeLayout graphLayout;
     private LineChart mChart;
 
@@ -43,9 +45,12 @@ public class GraphActivity extends Activity {
         setContentView(R.layout.gr_activity);
         graphLayout = (RelativeLayout) findViewById(R.id.graphLayout);
 
-        /*mChart = new LineChart(this);
+        mChart = new LineChart(this);
 
-        graphLayout.addView(mChart);
+        //graphLayout.addView(mChart); --> Sale un cuarto de grafica
+        graphLayout.addView(mChart, new AbsListView.LayoutParams
+                (AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.MATCH_PARENT));
+
 
         //mChart.setOnChartValueSelectedListener(this);
 
@@ -53,6 +58,7 @@ public class GraphActivity extends Activity {
         mChart.setDescription("");
         mChart.setNoDataTextDescription("You need to provide data for the chart.");
 
+        //mChart.setHighlightEnable(true);
         // enable touch gestures
         mChart.setTouchEnabled(true);
 
@@ -73,30 +79,30 @@ public class GraphActivity extends Activity {
         // add empty data
         mChart.setData(data);
 
-        Typeface tf = Typeface.createFromAsset(getAssets(), "OpenSans-Regular.ttf");
+        //Typeface tf = Typeface.createFromAsset(getAssets(), "OpenSans-Regular.ttf");
 
         // get the legend (only possible after setting data)
         Legend l = mChart.getLegend();
 
         // modify the legend ...
-        // l.setPosition(LegendPosition.LEFT_OF_CHART);
+        //l.setPosition(Legend.LegendPosition.LEFT_OF_CHART);
         l.setForm(LegendForm.LINE);
-        l.setTypeface(tf);
+        //l.setTypeface(tf);
         l.setTextColor(Color.WHITE);
 
         XAxis xl = mChart.getXAxis();
-        xl.setTypeface(tf);
+        //xl.setTypeface(tf);
         xl.setTextColor(Color.WHITE);
         xl.setDrawGridLines(false);
         xl.setAvoidFirstLastClipping(true);
-        xl.setSpaceBetweenLabels(5);
-        xl.setEnabled(true);
+        //xl.setSpaceBetweenLabels(5);
+        //xl.setEnabled(true);
 
         YAxis leftAxis = mChart.getAxisLeft();
-        leftAxis.setTypeface(tf);
+        // leftAxis.setTypeface(tf);
         leftAxis.setTextColor(Color.WHITE);
-        leftAxis.setAxisMaxValue(100f);
-        leftAxis.setAxisMinValue(0f);
+        leftAxis.setAxisMaxValue(120f);
+        //leftAxis.setAxisMinValue(0f);
         leftAxis.setDrawGridLines(true);
 
         YAxis rightAxis = mChart.getAxisRight();
@@ -104,15 +110,18 @@ public class GraphActivity extends Activity {
 
     }
 
-   /* private int year = 2015;
-    private  Object[] mMonths;
+    private int year = 2015;
+    private Object[] mMonths;
+
+
 
     private void addEntry() {
 
-        LineData data = mChart.getData();
+        LineData data = mChart.getData(); //PINTA LINEA
 
         if (data != null) {
 
+            //LineDataSet set = (LineDataSet) data.getDataSetByIndex(0);
             ILineDataSet set = data.getDataSetByIndex(0);
             // set.addEntry(...); // can be called as well
 
@@ -123,8 +132,10 @@ public class GraphActivity extends Activity {
 
             // add a new x-value first
 
-            data.addXValue(mMonths[data.getXValCount() % 12] + " "
-                    + (year + data.getXValCount() / 12));
+          //OR  //data.addXValue(mMonths[data.getXValCount() % 12] + " "
+                  //  + (year + data.getXValCount() / 12));
+            //data.addEntry(new Entry((float) (Math.random() * 40) + 30f, set.getEntryCount()), 0);
+            data.addXValue("");
             data.addEntry(new Entry((float) (Math.random() * 40) + 30f, set.getEntryCount()), 0);
 
 
@@ -143,16 +154,19 @@ public class GraphActivity extends Activity {
             // AxisDependency.LEFT);
         }
     }
-    */
 
-    /*private LineDataSet createSet() {
 
-        LineDataSet set = new LineDataSet(null, "Dynamic Data");
+    private LineDataSet createSet() {
+
+        LineDataSet set = new LineDataSet(null, "SPL db");
+        set.setDrawCubic(true);//b
+        set.setCubicIntensity(0.2f);//b
         set.setAxisDependency(AxisDependency.LEFT);
         set.setColor(ColorTemplate.getHoloBlue());
         set.setCircleColor(Color.WHITE);
         set.setLineWidth(2f);
         set.setCircleRadius(4f);
+        set.setColor(ColorTemplate.getHoloBlue());//b
         set.setFillAlpha(65);
         set.setFillColor(ColorTemplate.getHoloBlue());
         set.setHighLightColor(Color.rgb(244, 117, 117));
@@ -160,15 +174,18 @@ public class GraphActivity extends Activity {
         set.setValueTextSize(9f);
         set.setDrawValues(false);
         return set;
-    }*/
+    }
 
-   /* private void feedMultiple() {
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         new Thread(new Runnable() {
 
             @Override
             public void run() {
-                for(int i = 0; i < 500; i++) {
+                for(int i = 0; i < 100; i++) {
 
                     runOnUiThread(new Runnable() {
 
@@ -179,7 +196,35 @@ public class GraphActivity extends Activity {
                     });
 
                     try {
-                        Thread.sleep(35);
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+    }
+
+    /*private void feedMultiple() {
+        super.onResume();
+
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                for(int i = 0; i < 100; i++) {
+
+                    runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            addEntry();
+                        }
+                    });
+
+                    try {
+                        Thread.sleep(500);
                     } catch (InterruptedException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
@@ -189,7 +234,7 @@ public class GraphActivity extends Activity {
         }).start();
     }*/
 
-    /*@Override
+    @Override
     public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
         Log.i("Entry selected", e.toString());
     }
@@ -198,6 +243,6 @@ public class GraphActivity extends Activity {
     public void onNothingSelected() {
         Log.i("Nothing selected", "Nothing selected.");
     }
-    */
-    }
+
 }
+
