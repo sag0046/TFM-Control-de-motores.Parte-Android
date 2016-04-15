@@ -48,6 +48,7 @@ public class GraphActivity extends Activity implements OnChartValueSelectedListe
         mChart = new LineChart(this);
 
         //graphLayout.addView(mChart); --> Sale un cuarto de grafica
+        //CON ESTO APARECE LA GRAFICA COMPLETA
         graphLayout.addView(mChart, new AbsListView.LayoutParams
                 (AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.MATCH_PARENT));
 
@@ -110,14 +111,15 @@ public class GraphActivity extends Activity implements OnChartValueSelectedListe
 
     }
 
-    private int year = 2015;
-    private Object[] mMonths;
+    //no las he usado para hacer la prueba
+    //private int year = 2015;
+    //private Object[] mMonths;
 
 
 
     private void addEntry() {
 
-        LineData data = mChart.getData(); //PINTA LINEA
+        LineData data = mChart.getData();
 
         if (data != null) {
 
@@ -177,7 +179,7 @@ public class GraphActivity extends Activity implements OnChartValueSelectedListe
     }
 
 
-
+//ESTO HACE QUE SE EJECUTE EN TIEMPO REAL
     @Override
     protected void onResume() {
         super.onResume();
