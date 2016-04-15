@@ -29,7 +29,6 @@
         android:text="@string/fa_bt"
         android:textSize="50sp"
         android:textColor="#9b59b6"
-        android:onClick="lanzarBT"
         android:layout_gravity="center_horizontal" />
 
     <Button

@@ -87,12 +87,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button btnPlay = (Button)findViewById(R.id.play);
         Button btnStop = (Button)findViewById(R.id.stop);
         Button btnGr = (Button)findViewById(R.id.btnGr);
-
-
+        Button btnBt = (Button)findViewById(R.id.btnBt);
 
         btnPlay.setOnClickListener(this);
         btnStop.setOnClickListener(this);
         btnGr.setOnClickListener(this);
+        btnBt.setOnClickListener(this);
+
 
 
             /*@Override
@@ -176,6 +177,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case (R.id.btnGr):
                 lanzarGR(v);
                 break;
+            case (R.id.btnBt):
+                lanzarBT(v);
+                break;
 
         }
         //}
@@ -211,11 +215,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Inicializamos el BluetoothService para poder realizar las conexiones de bluetooth.
         mService = new BluetoothService(this, mHandler);
 
-        lanzarBT();
+        //lanzarBT(v);
     }
 
     //Lanza la conexion Bluetooth
-    public void lanzarBT() {
+    public void lanzarBT(View v) {
         Intent i = new Intent(this, BluetoothActivity.class );
         startActivityForResult(i, REQUEST_CONNECT_DEVICE);
     }
