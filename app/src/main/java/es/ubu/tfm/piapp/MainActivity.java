@@ -499,5 +499,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    public int getVelocidadDeseada(){
+        return speed;
+    }
+
 
 }

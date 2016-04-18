@@ -1,250 +1,158 @@
 package es.ubu.tfm.piapp;
 
 import android.app.Activity;
+
 import android.os.Bundle;
 import android.widget.AbsListView;
 import android.widget.RelativeLayout;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.achartengine.ChartFactory;
+import org.achartengine.GraphicalView;
+import org.achartengine.chart.LineChart;
+import org.achartengine.chart.PointStyle;
+import org.achartengine.model.XYMultipleSeriesDataset;
+import org.achartengine.model.XYSeries;
+import org.achartengine.renderer.XYMultipleSeriesRenderer;
+import org.achartengine.renderer.XYSeriesRenderer;
 
 import android.graphics.Color;
-import android.graphics.Typeface;
+import android.graphics.Paint.Align;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.WindowManager;
-import android.widget.Toast;
+import android.os.Handler;
 
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.Legend.LegendForm;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.components.YAxis.AxisDependency;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.github.mikephil.charting.utils.ColorTemplate;
-import com.github.mikephil.charting.highlight.Highlight;
+public class GraphActivity extends Activity {
 
-import com.github.mikephil.charting.charts.LineChart;
-
-/**
- * Created by Sandra on 13/04/2016.
- */
-public class GraphActivity extends Activity implements OnChartValueSelectedListener {
     private RelativeLayout graphLayout;
     private LineChart mChart;
 
+    private XYMultipleSeriesDataset dataset;
+    private GraphicalView graphicalView;
+    private double addX = 6;
+    private double plus = 6;
+    private double minus = 13;
+    private Handler handler = new Handler();
+    private Runnable updateRunnable = new Runnable() {
+
+        @Override
+        public void run() {
+            dataset.getSeriesAt(0).add(addX, plus);
+            dataset.getSeriesAt(1).add(addX, minus);
+            addX++;
+            plus++;
+            minus--;
+            graphicalView.repaint();
+            if (addX < 20) handler.postDelayed(updateRunnable, 1000);
+        }
+    };
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gr_activity);
         graphLayout = (RelativeLayout) findViewById(R.id.graphLayout);
 
-        mChart = new LineChart(this);
+        String[] titles = new String[]{"Velocidad Real", "Velocidad Deseada"};
+        List<double[]> x = new ArrayList<double[]>();
+        for (int i = 0; i < titles.length; i++) {
+            x.add(new double[] { 1});
+        }
+        List<double[]> values = new ArrayList<double[]>();
 
-        //graphLayout.addView(mChart); --> Sale un cuarto de grafica
-        //CON ESTO APARECE LA GRAFICA COMPLETA
-        graphLayout.addView(mChart, new AbsListView.LayoutParams
-                (AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.MATCH_PARENT));
+        for (int i = 1; i < 30; i++) {
+            values.add(new double[] { i });
+            values.add(new double[] { 150 });
+            //values.add(new double[] { getVelocidadDeseada() });
+        }
 
+        int[] colors = new int[] { Color.BLUE, Color.GREEN };
+        PointStyle[] styles = new PointStyle[] { PointStyle.CIRCLE,	PointStyle.DIAMOND };
+        XYMultipleSeriesRenderer renderer = buildRenderer(colors, styles);
+        int length = renderer.getSeriesRendererCount();
+        for (int i = 0; i < length; i++) {
+            ((XYSeriesRenderer) renderer.getSeriesRendererAt(i))
+                    .setFillPoints(true);
+        }
+        setChartSettings(renderer, "Velocidad", "Tiempo",
+                "Velocidad Encoder", 0.5, 12.5, 0, 260, Color.LTGRAY, Color.LTGRAY);
+        renderer.setXLabels(12);
+        renderer.setYLabels(10);
+        renderer.setShowGrid(true);
+        renderer.setXLabelsAlign(Align.RIGHT);
+        renderer.setYLabelsAlign(Align.RIGHT);
+        renderer.setZoomButtonsVisible(true);
+        renderer.setPanLimits(new double[]{0, 20, 0, 260});
+        renderer.setZoomLimits(new double[]{0, 20, 0, 260});
 
-        //mChart.setOnChartValueSelectedListener(this);
+        dataset = buildDataset(titles, x, values);
 
-        //Customize
-        mChart.setDescription("");
-        mChart.setNoDataTextDescription("You need to provide data for the chart.");
+        graphicalView = ChartFactory.getLineChartView(
+                getApplicationContext(), dataset, renderer);
 
-        //mChart.setHighlightEnable(true);
-        // enable touch gestures
-        mChart.setTouchEnabled(true);
-
-        // enable scaling and dragging
-        mChart.setDragEnabled(true);
-        mChart.setScaleEnabled(true);
-        mChart.setDrawGridBackground(false);
-
-        // if disabled, scaling can be done on x- and y-axis separately
-        mChart.setPinchZoom(true);
-
-        // set an alternative background color
-        mChart.setBackgroundColor(Color.LTGRAY);
-
-        LineData data = new LineData();
-        data.setValueTextColor(Color.WHITE);
-
-        // add empty data
-        mChart.setData(data);
-
-        //Typeface tf = Typeface.createFromAsset(getAssets(), "OpenSans-Regular.ttf");
-
-        // get the legend (only possible after setting data)
-        Legend l = mChart.getLegend();
-
-        // modify the legend ...
-        //l.setPosition(Legend.LegendPosition.LEFT_OF_CHART);
-        l.setForm(LegendForm.LINE);
-        //l.setTypeface(tf);
-        l.setTextColor(Color.WHITE);
-
-        XAxis xl = mChart.getXAxis();
-        //xl.setTypeface(tf);
-        xl.setTextColor(Color.WHITE);
-        xl.setDrawGridLines(false);
-        xl.setAvoidFirstLastClipping(true);
-        //xl.setSpaceBetweenLabels(5);
-        //xl.setEnabled(true);
-
-        YAxis leftAxis = mChart.getAxisLeft();
-        // leftAxis.setTypeface(tf);
-        leftAxis.setTextColor(Color.WHITE);
-        leftAxis.setAxisMaxValue(120f);
-        //leftAxis.setAxisMinValue(0f);
-        leftAxis.setDrawGridLines(true);
-
-        YAxis rightAxis = mChart.getAxisRight();
-        rightAxis.setEnabled(false);
-
+        setContentView(graphicalView);
+        handler.postDelayed(updateRunnable, 1000);
     }
 
-    //no las he usado para hacer la prueba
-    //private int year = 2015;
-    //private Object[] mMonths;
+    private XYMultipleSeriesDataset buildDataset(String[] titles,
+                                                 List<double[]> xValues, List<double[]> yValues) {
+        XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
+        addXYSeries(dataset, titles, xValues, yValues, 0);
+        return dataset;
+    }
 
-
-
-    private void addEntry() {
-
-        LineData data = mChart.getData();
-
-        if (data != null) {
-
-            //LineDataSet set = (LineDataSet) data.getDataSetByIndex(0);
-            ILineDataSet set = data.getDataSetByIndex(0);
-            // set.addEntry(...); // can be called as well
-
-            if (set == null) {
-                set = createSet();
-                data.addDataSet(set);
+    private void addXYSeries(XYMultipleSeriesDataset dataset, String[] titles,
+                             List<double[]> xValues, List<double[]> yValues, int scale) {
+        int length = titles.length;
+        for (int i = 0; i < length; i++) {
+            XYSeries series = new XYSeries(titles[i], scale);
+            double[] xV = xValues.get(i);
+            double[] yV = yValues.get(i);
+            int seriesLength = xV.length;
+            for (int k = 0; k < seriesLength; k++) {
+                series.add(xV[k], yV[k]);
             }
-
-            // add a new x-value first
-
-          //OR  //data.addXValue(mMonths[data.getXValCount() % 12] + " "
-                  //  + (year + data.getXValCount() / 12));
-            //data.addEntry(new Entry((float) (Math.random() * 40) + 30f, set.getEntryCount()), 0);
-            data.addXValue("");
-            data.addEntry(new Entry((float) (Math.random() * 40) + 30f, set.getEntryCount()), 0);
-
-
-            // let the chart know it's data has changed
-            mChart.notifyDataSetChanged();
-
-            // limit the number of visible entries
-            mChart.setVisibleXRangeMaximum(120);
-            // mChart.setVisibleYRange(30, AxisDependency.LEFT);
-
-            // move to the latest entry
-            mChart.moveViewToX(data.getXValCount() - 121);
-
-            // this automatically refreshes the chart (calls invalidate())
-            // mChart.moveViewTo(data.getXValCount()-7, 55f,
-            // AxisDependency.LEFT);
+            dataset.addSeries(series);
         }
     }
 
-
-    private LineDataSet createSet() {
-
-        LineDataSet set = new LineDataSet(null, "SPL db");
-        set.setDrawCubic(true);//b
-        set.setCubicIntensity(0.2f);//b
-        set.setAxisDependency(AxisDependency.LEFT);
-        set.setColor(ColorTemplate.getHoloBlue());
-        set.setCircleColor(Color.WHITE);
-        set.setLineWidth(2f);
-        set.setCircleRadius(4f);
-        set.setColor(ColorTemplate.getHoloBlue());//b
-        set.setFillAlpha(65);
-        set.setFillColor(ColorTemplate.getHoloBlue());
-        set.setHighLightColor(Color.rgb(244, 117, 117));
-        set.setValueTextColor(Color.WHITE);
-        set.setValueTextSize(9f);
-        set.setDrawValues(false);
-        return set;
+    private XYMultipleSeriesRenderer buildRenderer(int[] colors,
+                                                   PointStyle[] styles) {
+        XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
+        setRenderer(renderer, colors, styles);
+        return renderer;
     }
 
-
-//ESTO HACE QUE SE EJECUTE EN TIEMPO REAL
-    @Override
-    protected void onResume() {
-        super.onResume();
-        new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                for(int i = 0; i < 100; i++) {
-
-                    runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            addEntry();
-                        }
-                    });
-
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }).start();
+    private void setRenderer(XYMultipleSeriesRenderer renderer, int[] colors,
+                             PointStyle[] styles) {
+        renderer.setAxisTitleTextSize(16);
+        renderer.setChartTitleTextSize(20);
+        renderer.setLabelsTextSize(15);
+        renderer.setLegendTextSize(15);
+        renderer.setPointSize(5f);
+        renderer.setMargins(new int[] { 20, 30, 15, 20 });
+        int length = colors.length;
+        for (int i = 0; i < length; i++) {
+            XYSeriesRenderer r = new XYSeriesRenderer();
+            r.setColor(colors[i]);
+            r.setPointStyle(styles[i]);
+            renderer.addSeriesRenderer(r);
+        }
     }
 
-    /*private void feedMultiple() {
-        super.onResume();
-
-        new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                for(int i = 0; i < 100; i++) {
-
-                    runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            addEntry();
-                        }
-                    });
-
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }).start();
-    }*/
-
-    @Override
-    public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
-        Log.i("Entry selected", e.toString());
+    private void setChartSettings(XYMultipleSeriesRenderer renderer,
+                                  String title, String xTitle, String yTitle, double xMin,
+                                  double xMax, double yMin, double yMax, int axesColor,
+                                  int labelsColor) {
+        renderer.setChartTitle(title);
+        renderer.setXTitle(xTitle);
+        renderer.setYTitle(yTitle);
+        renderer.setXAxisMin(xMin);
+        renderer.setXAxisMax(xMax);
+        renderer.setYAxisMin(yMin);
+        renderer.setYAxisMax(yMax);
+        renderer.setAxesColor(axesColor);
+        renderer.setLabelsColor(labelsColor);
     }
-
-    @Override
-    public void onNothingSelected() {
-        Log.i("Nothing selected", "Nothing selected.");
-    }
-
 }
-
