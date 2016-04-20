@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // Variables algoritmo
     public static String message; //PIDE INICIALIZAR A NULL
+    private StringBuilder sb = new StringBuilder();
     public static int speed;
     public static int k_P; //cte k para algoritmo proporcional
     public static int k_PI; // cte k para algoritmo PI
@@ -469,8 +470,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     byte[] readBuf = (byte[]) msg.obj;
                     // Pasamos a string
                     String readMessage = new String(readBuf, 0, msg.arg1);
+                    String sbprint="";
 
-                    Toast.makeText(getApplicationContext(), "bytes salida" + " " + readMessage, Toast.LENGTH_SHORT).show();
+                    sb.append(readMessage);
+                    int endOfLineIndex = sb.indexOf("\r\n");
+
+                    Toast.makeText(getApplicationContext(), "bytes salida 1 " + " " + sb.toString(), Toast.LENGTH_SHORT).show();
+
+                    if(endOfLineIndex > 0) {
+                        sbprint = sb.substring(0, endOfLineIndex);
+                        sb.delete(0, sb.length());
+                    }
+
+                    Toast.makeText(getApplicationContext(), "bytes salida 2 " + " " + sb.toString(), Toast.LENGTH_SHORT).show();
                     break;
             }
         }
@@ -499,7 +511,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public int getVelocidadDeseada(){
+    protected int getVelDeseada(){
+        //speed=150;
         return speed;
     }
 
