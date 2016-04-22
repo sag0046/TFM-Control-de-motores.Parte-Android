@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static int k_P; //cte k para algoritmo proporcional
     public static int k_PI; // cte k para algoritmo PI
     public static int t;
+    public static double [] vecValoresEjeX;
 
     private BluetoothService mService = null;
 
@@ -454,6 +455,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
+            int posEjeX=0;
             switch (msg.what) {
                 // Nombre del dispositivo conectado
                 case MESSAGE_DEVICE_CONNECTED:
@@ -464,7 +466,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 case MESSAGE_TOAST:
                     Toast.makeText(getApplicationContext(), getString((int) msg.getData().getLong(TOAST)), Toast.LENGTH_SHORT).show();
                     break;
-                case MESSAGE_READ:
+                /*case MESSAGE_READ:
                     //int bytes = msg.arg1;
                     // Obtenemos la cadena de bytes recibidos
                     byte[] readBuf = (byte[]) msg.obj;
@@ -475,14 +477,56 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     sb.append(readMessage);
                     int endOfLineIndex = sb.indexOf("\r\n");
 
-                    Toast.makeText(getApplicationContext(), "bytes salida 1 " + " " + sb.toString(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "bytes salida 1 " + " " + readMessage, Toast.LENGTH_SHORT).show();
 
                     if(endOfLineIndex > 0) {
                         sbprint = sb.substring(0, endOfLineIndex);
                         sb.delete(0, sb.length());
                     }
+                    
 
                     Toast.makeText(getApplicationContext(), "bytes salida 2 " + " " + sb.toString(), Toast.LENGTH_SHORT).show();
+                    break;*/
+                case MESSAGE_READ:
+                    //int bytes = msg.arg1;
+                    // Obtenemos la cadena de bytes recibidos
+                    byte[] readBuf = (byte[]) msg.obj;
+                    // Pasamos a string
+                    String readMessage = new String(readBuf, 0, msg.arg1);
+                    String sbprint="";
+
+                    boolean esNumero = isNumeric(readMessage);
+
+                    sb.append(readMessage);
+
+                    if(!esNumero){
+                        sb.delete(0, sb.length());
+                    }
+
+                    /*if(sb.indexOf("/")>0) {
+                        sb.delete(0, sb.indexOf("/"));
+                      }else if (sb.indexOf("+")>0) {
+                        sb.delete(0, sb.indexOf("+"));
+                        }else if (sb.indexOf("-")>0) {
+                        sb.delete(0, sb.indexOf("-"));
+                          }else if (sb.indexOf("*")>0){
+                                    sb.delete(0, sb.indexOf("*"));
+                          }*/
+
+
+
+                    Toast.makeText(getApplicationContext(), "bytes " + sb.toString() + " " + esNumero, Toast.LENGTH_SHORT).show();
+
+                    //Toast.makeText(getApplicationContext(), "bytes salida 2 " + " " + sb.toString(), Toast.LENGTH_SHORT).show();
+                    if(sb.length()==3){
+                        //vecValoresEjeX[posEjeX] = Double.parseDouble(sb.toString());
+                        posEjeX++;
+                        Toast.makeText(getApplicationContext(), "bytes " + sb.toString() + " " + esNumero, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "bytes " + " " + sb.toString(), Toast.LENGTH_SHORT).show();
+                        //sb.delete(1, 3);
+                    }
+
+                    //Toast.makeText(getApplicationContext(), "bytes salida 2 " + " " + sb.toString(), Toast.LENGTH_SHORT).show();
                     break;
             }
         }
@@ -516,5 +560,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return speed;
     }
 
+    protected double[] getVelEnvoder(){
+        return vecValoresEjeX;
+    }
+
+    public static boolean isNumeric(String str) {
+        if(str == null || str.isEmpty()){
+            return false;
+        }
+        if (!Character.isDigit(str.charAt(0))){
+            return false;
+        }
+        int i = 0;
+        /*if(str.charAt(i == "-"){
+            if (str.length() > 1){
+                i++;
+            } else {
+                return false;
+            }
+        }*/
+        for (i=0; i< str.length(); i++) {
+            if (!Character.isDigit(str.charAt(i))){
+                return false;
+            }
+        }
+        return true;
+    }
 
 }

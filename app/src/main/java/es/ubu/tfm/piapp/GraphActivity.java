@@ -77,8 +77,11 @@ public class GraphActivity extends Activity {
         int logGraph = 20;
 
         double [] vec = new double[logGraph];
-        double [] vecValoresEjeX = new double[logGraph];
+        //double [] vecValoresEjeX = new double[logGraph];
         double [] vecValoresEjeY = new double[logGraph];
+
+        int valor = mainPrinc.getVelDeseada();
+        double [] vecValoresEjeX = mainPrinc.getVelEnvoder();
 
         for (int i = 0; i < titles.length; i++) {
             for (int j = 0; j < logGraph; j++) {
@@ -89,12 +92,10 @@ public class GraphActivity extends Activity {
 
         List<double[]> values = new ArrayList<double[]>();
 
-        int valor = mainPrinc.getVelDeseada();
-
-        Toast.makeText(getApplicationContext(), "salida" + " " + titles.length, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "salida" + " " + titles.length, Toast.LENGTH_SHORT).show();
 
         for (int i=0; i < logGraph; i++) {
-            vecValoresEjeX[i] = 13*Math.random();
+            //vecValoresEjeX[i] = 13*Math.random();
             vecValoresEjeY[i] = valor;
         }
 
