@@ -82,6 +82,7 @@ public class GraphActivity extends Activity {
 
         int valor = mainPrinc.getVelDeseada();
         double [] vecValoresEjeX = mainPrinc.getVelEnvoder();
+       // int logGraph = vecValoresEjeX.length; // modificado 23/4/16
 
         for (int i = 0; i < titles.length; i++) {
             for (int j = 0; j < logGraph; j++) {

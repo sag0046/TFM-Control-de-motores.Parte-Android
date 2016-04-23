@@ -521,9 +521,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if(sb.length()==3){
                         //vecValoresEjeX[posEjeX] = Double.parseDouble(sb.toString());
                         posEjeX++;
-                        Toast.makeText(getApplicationContext(), "bytes " + sb.toString() + " " + esNumero, Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(getApplicationContext(), "bytes " + sb.toString() + " " + esNumero, Toast.LENGTH_SHORT).show();
                         //Toast.makeText(getApplicationContext(), "bytes " + " " + sb.toString(), Toast.LENGTH_SHORT).show();
-                        //sb.delete(1, 3);
+                        sb.delete(0, sb.length());
                     }
 
                     //Toast.makeText(getApplicationContext(), "bytes salida 2 " + " " + sb.toString(), Toast.LENGTH_SHORT).show();
