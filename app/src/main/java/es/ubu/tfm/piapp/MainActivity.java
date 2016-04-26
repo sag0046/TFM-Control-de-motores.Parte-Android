@@ -19,6 +19,8 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static int k_P; //cte k para algoritmo proporcional
     public static int k_PI; // cte k para algoritmo PI
     public static int t;
-    public static double [] vecValoresEjeX;
+    public static double [] vecValoresEjeX = new double[20];
 
     private BluetoothService mService = null;
 
@@ -503,27 +505,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         sb.delete(0, sb.length());
                     }
 
-                    /*if(sb.indexOf("/")>0) {
-                        sb.delete(0, sb.indexOf("/"));
-                      }else if (sb.indexOf("+")>0) {
-                        sb.delete(0, sb.indexOf("+"));
-                        }else if (sb.indexOf("-")>0) {
-                        sb.delete(0, sb.indexOf("-"));
-                          }else if (sb.indexOf("*")>0){
-                                    sb.delete(0, sb.indexOf("*"));
-                          }*/
-
-
-
-                    Toast.makeText(getApplicationContext(), "bytes " + sb.toString() + " " + esNumero, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "parte  " + sb.toString() + " " + esNumero, Toast.LENGTH_SHORT).show();
 
                     //Toast.makeText(getApplicationContext(), "bytes salida 2 " + " " + sb.toString(), Toast.LENGTH_SHORT).show();
                     if(sb.length()==3){
-                        //vecValoresEjeX[posEjeX] = Double.parseDouble(sb.toString());
-                        posEjeX++;
-                       // Toast.makeText(getApplicationContext(), "bytes " + sb.toString() + " " + esNumero, Toast.LENGTH_SHORT).show();
-                        //Toast.makeText(getApplicationContext(), "bytes " + " " + sb.toString(), Toast.LENGTH_SHORT).show();
-                        sb.delete(0, sb.length());
+                        try {
+                            vecValoresEjeX[posEjeX] = Double.parseDouble(sb.toString());
+                            //Toast.makeText(getApplicationContext(), "bytes " + vecValoresEjeX[posEjeX], Toast.LENGTH_SHORT).show();
+                            posEjeX++;
+                            //Toast.makeText(getApplicationContext(), "bytes " + Double.parseDouble(sb.toString()) + " " + esNumero, Toast.LENGTH_SHORT).show();
+
+                            sb.delete(0, sb.length());
+                        }catch (Exception e){
+                            Toast.makeText(getApplicationContext(), "Excepcion " + sb.toString() + " psocion " + posEjeX + " aa " + Double.parseDouble(sb.toString()), Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     //Toast.makeText(getApplicationContext(), "bytes salida 2 " + " " + sb.toString(), Toast.LENGTH_SHORT).show();
@@ -560,7 +555,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return speed;
     }
 
-    protected double[] getVelEnvoder(){
+    public static double[] getVelEncoder(){
+        /*if(vecValoresEjeX.length==0){
+            Toast.makeText(getApplicationContext(), "test ", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(getApplicationContext(), "salida ", Toast.LENGTH_SHORT).show();
+        }*/
+        //Toast.makeText(getApplicationContext(), "test ", Toast.LENGTH_SHORT).show();
+        /*for(int i=0; i<vecValoresEjeX.length;i++){
+                Toast.makeText(getApplicationContext(), "MainEjeX " + vecValoresEjeX, Toast.LENGTH_SHORT).show();
+
+        }*/
+        //Toast.makeText(getApplicationContext(), "salida ", Toast.LENGTH_SHORT).show();
         return vecValoresEjeX;
     }
 

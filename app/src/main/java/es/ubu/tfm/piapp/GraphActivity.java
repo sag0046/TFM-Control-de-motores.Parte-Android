@@ -72,16 +72,23 @@ public class GraphActivity extends Activity {
         values.add(new double[] { 150, 150, 150, 150, 150 });
         */
 
-        //No funciona esto
-
-        int logGraph = 20;
-
-        double [] vec = new double[logGraph];
-        //double [] vecValoresEjeX = new double[logGraph];
+        double [] vecValoresEjeX = mainPrinc.getVelEncoder();
+        int valor = mainPrinc.getVelDeseada();
+        int logGraph = vecValoresEjeX.length;
         double [] vecValoresEjeY = new double[logGraph];
 
-        int valor = mainPrinc.getVelDeseada();
-        double [] vecValoresEjeX = mainPrinc.getVelEnvoder();
+
+        for(int i=0; i<20;i++){
+            Toast.makeText(getApplicationContext(), "Valor " + valor, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "EjeX " + vecValoresEjeX[i], Toast.LENGTH_SHORT).show();
+        }
+
+        Toast.makeText(getApplicationContext(), "Tamaño " + logGraph, Toast.LENGTH_SHORT).show();
+
+
+
+        double [] vec = new double[logGraph];
+
        // int logGraph = vecValoresEjeX.length; // modificado 23/4/16
 
         for (int i = 0; i < titles.length; i++) {
@@ -98,6 +105,7 @@ public class GraphActivity extends Activity {
         for (int i=0; i < logGraph; i++) {
             //vecValoresEjeX[i] = 13*Math.random();
             vecValoresEjeY[i] = valor;
+            //Toast.makeText(getApplicationContext(), "bytes " + vecValoresEjeX[i], Toast.LENGTH_SHORT).show();
         }
 
         for (int i=0; i < titles.length; i++) {
