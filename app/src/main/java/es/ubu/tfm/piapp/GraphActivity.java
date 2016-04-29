@@ -1,6 +1,7 @@
 package es.ubu.tfm.piapp;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.widget.AbsListView;
 import android.widget.RelativeLayout;
@@ -33,7 +34,8 @@ public class GraphActivity extends Activity {
 
     private XYMultipleSeriesDataset dataset;
     private GraphicalView graphicalView;
-    private double addX = 30;
+    private double addX = mainPrinc.getPosEjeX();//30;
+    //private double addX = mainPrinc.getPosEjeX();//30;
     private double plus = 6;
     private double minus = 13;
     private Handler handler = new Handler();
@@ -59,6 +61,7 @@ public class GraphActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gr_activity);
         graphLayout = (RelativeLayout) findViewById(R.id.graphLayout);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
         String[] titles = new String[] { "Velocidad Real", "Velocidad Deseada" };
         List<double[]> x = new ArrayList<double[]>();
@@ -74,22 +77,22 @@ public class GraphActivity extends Activity {
 
         double [] vecValoresEjeX = mainPrinc.getVelEncoder();
         int valor = mainPrinc.getVelDeseada();
-        int logGraph = vecValoresEjeX.length;
+        int logGraph = mainPrinc.getPosEjeX();
         double [] vecValoresEjeY = new double[logGraph];
 
 
-        for(int i=0; i<20;i++){
-            Toast.makeText(getApplicationContext(), "Valor " + valor, Toast.LENGTH_SHORT).show();
+        /*for(int i=0; i<logGraph;i++){
+            //Toast.makeText(getApplicationContext(), "Valor " + valor, Toast.LENGTH_SHORT).show();
             Toast.makeText(getApplicationContext(), "EjeX " + vecValoresEjeX[i], Toast.LENGTH_SHORT).show();
-        }
+        }*/
 
-        Toast.makeText(getApplicationContext(), "Tamaño " + logGraph, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "Tamaño " + logGraph, Toast.LENGTH_SHORT).show();
 
 
 
         double [] vec = new double[logGraph];
 
-       // int logGraph = vecValoresEjeX.length; // modificado 23/4/16
+        // int logGraph = vecValoresEjeX.length; // modificado 23/4/16
 
         for (int i = 0; i < titles.length; i++) {
             for (int j = 0; j < logGraph; j++) {
@@ -126,7 +129,7 @@ public class GraphActivity extends Activity {
                     .setFillPoints(true);
         }
 
-        setChartSettings(renderer, "Velocidad", "Tiempo",
+        setChartSettings(renderer, "Velocidad", "Tiempo (ms)",
                 "Velocidad Encoder", 0, 12, 0, 260, Color.LTGRAY, Color.LTGRAY);
         renderer.setXLabels(12);
         renderer.setYLabels(10);
@@ -134,8 +137,8 @@ public class GraphActivity extends Activity {
         renderer.setXLabelsAlign(Align.RIGHT);
         renderer.setYLabelsAlign(Align.RIGHT);
         renderer.setZoomButtonsVisible(true);
-        renderer.setPanLimits(new double[] { 0, 20, 0, 260 });
-        renderer.setZoomLimits(new double[] { 0, 20, 0, 260 });
+        renderer.setPanLimits(new double[] { 0, logGraph, 0, 260 });
+        renderer.setZoomLimits(new double[] { 0, logGraph, 0, 260 });
 
         dataset = buildDataset(titles, x, values);
 
@@ -181,7 +184,7 @@ public class GraphActivity extends Activity {
         renderer.setLabelsTextSize(15);
         renderer.setLegendTextSize(15);
         renderer.setPointSize(5f);
-        renderer.setMargins(new int[] { 20, 30, 15, 20 });
+        renderer.setMargins(new int[] { 25, 30, 15, 28 });
         int length = colors.length;
         for (int i = 0; i < length; i++) {
             XYSeriesRenderer r = new XYSeriesRenderer();

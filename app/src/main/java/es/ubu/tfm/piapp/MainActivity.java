@@ -3,6 +3,7 @@ package es.ubu.tfm.piapp;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Message;
@@ -54,7 +55,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static int k_P; //cte k para algoritmo proporcional
     public static int k_PI; // cte k para algoritmo PI
     public static int t;
-    public static double [] vecValoresEjeX = new double[20];
+    public static double [] vecValoresEjeX = new double[2000];
+    public static int posEjeX=0;
 
     private BluetoothService mService = null;
 
@@ -70,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         Typeface iconFont = FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME);
         FontManager.markAsIconContainer(findViewById(R.id.icons_container), iconFont);
         FontManager.markAsIconContainer(findViewById(R.id.btnBt), iconFont);
@@ -97,69 +100,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnStop.setOnClickListener(this);
         btnGr.setOnClickListener(this);
         btnBt.setOnClickListener(this);
-
-
-
-            /*@Override
-            public boolean onTouch(View v, MotionEvent event) {
-                //PLAY para enviar Velocidad,k,tiempo
-                /*Toast toast1 =
-                        Toast.makeText(getApplicationContext(),
-                                "PLAY", Toast.LENGTH_SHORT);
-
-                toast1.show();
-                // Obtenemos el tipo de acción
-                int action = MotionEventCompat.getActionMasked(event);
-
-                // Actuamos según el tipo de acción
-                switch (action) {
-                    case (MotionEvent.ACTION_DOWN):
-                        switch (v.getId()) {
-                            case (R.id.play):
-                                move(MOVE_PLAY);
-                                break;
-                            case (R.id.stop):
-                                move(MOVE_STOP);
-                                break;
-                        }
-                }
-                return true;
-            }*/
-        ;
-
-        /*asociamos el listener a los botones
-        btnPlay.setOnTouchListener(mOnTouchListener);
-        btnStop.setOnTouchListener(mOnTouchListener);
-        */
-
-
-        /*Button play = (Button)findViewById(R.id.play);
-        play.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //PLAY para enviar Velocidad,k,tiempo
-                Toast toast1 =
-                        Toast.makeText(getApplicationContext(),
-                                "PLAY", Toast.LENGTH_SHORT);
-
-                toast1.show();
-
-            }
-        });*/
-
-        /*Button btnStop = (Button)findViewById(R.id.stop);
-        btnStop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Parar motor
-                Toast toast2 =
-                        Toast.makeText(getApplicationContext(),
-                                "STOP ", Toast.LENGTH_SHORT);
-
-                toast2.show();
-
-            }
-        });*/
 
     }
 
@@ -230,7 +170,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void lanzarGR(View v) { //**********************************************************************
         Intent j = new Intent(this, GraphActivity.class );
-        startActivity(j);
+        if(getPosEjeX()!=0) {
+            startActivity(j);
+        }else{
+            Toast.makeText(getApplicationContext(), "Warning: No se han recibido ningún valor del encoder.", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -340,6 +284,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         message = "P" + passToString(speed) + passToString(k_P) /*+ passToString(500)*/;
         //message = "0000,0000";
 
+        // Reseteo variable posición Array datos a recibir por Bluetooth
+        setPosEjeX();
         // Obtenemos la cadena de bytes a enviar
         byte[] send = message.getBytes();
 
@@ -429,6 +375,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         toast1.show();
 
+        // Reseteo variable posición Array datos a recibir por Bluetooth
+        setPosEjeX();
+
         // Enviamos el mensaje
         mService.write(send);
     }
@@ -449,7 +398,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return valueString;
     }
 
-  //nombre dispositivo conectado
+    //nombre dispositivo conectado
     private String mConnectedDeviceName = null;
 
 
@@ -457,7 +406,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            int posEjeX=0;
             switch (msg.what) {
                 // Nombre del dispositivo conectado
                 case MESSAGE_DEVICE_CONNECTED:
@@ -485,7 +433,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         sbprint = sb.substring(0, endOfLineIndex);
                         sb.delete(0, sb.length());
                     }
-                    
+
 
                     Toast.makeText(getApplicationContext(), "bytes salida 2 " + " " + sb.toString(), Toast.LENGTH_SHORT).show();
                     break;*/
@@ -593,4 +541,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
+    public void setPosEjeX() {
+        posEjeX=0;
+    }
+
+    public static int getPosEjeX() {
+        return posEjeX;
+    }
 }
