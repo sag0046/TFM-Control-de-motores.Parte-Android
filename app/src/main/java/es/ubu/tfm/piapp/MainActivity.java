@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnGr.setOnClickListener(this);
         btnBt.setOnClickListener(this);
 
+
         getSupportActionBar().setSubtitle(getString(R.string.no_conectado));
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(ContextCompat.getDrawable(this,R.drawable.ic_logo_ubu));
