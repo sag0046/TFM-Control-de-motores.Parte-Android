@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.MotionEventCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -58,15 +59,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static double [] vecValoresEjeX = new double[2000];
     public static int posEjeX=0;
 
+    //Servicio BT
     private BluetoothService mService = null;
-
     //Adapatdor BT
     private BluetoothAdapter mBluetoothAdapter = null;
+    //nombre dispositivo conectado
+    private String mConnectedDeviceName = null;
 
     private RadioGroup radioGroupMio;
     private RadioButton radioButtonMio;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +78,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FontManager.markAsIconContainer(findViewById(R.id.icons_container), iconFont);
         FontManager.markAsIconContainer(findViewById(R.id.btnBt), iconFont);
         FontManager.markAsIconContainer(findViewById(R.id.btnGr), iconFont);
-
 
         // Obtenemos el adaptador Bluetooth
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -101,16 +101,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnGr.setOnClickListener(this);
         btnBt.setOnClickListener(this);
 
+        getSupportActionBar().setSubtitle(getString(R.string.no_conectado));
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(ContextCompat.getDrawable(this,R.drawable.ic_logo_ubu));
+
+
     }
 
     @Override
     public void onClick(View v) {
-
-        //int action = MotionEventCompat.getActionMasked(event);
-
-        // Actuamos según el tipo de acción
-        //switch (action) {
-        //    case (MotionEvent.ACTION_DOWN):
         switch (v.getId()) {
             case (R.id.play):
                 move(MOVE_PLAY);
@@ -126,9 +125,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
         }
-        //}
-        //return true;
-
     }
 
     //Check para elegir un algoritmo
@@ -158,14 +154,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void startBluetoothService() {
         // Inicializamos el BluetoothService para poder realizar las conexiones de bluetooth.
         mService = new BluetoothService(this, mHandler);
-
-        //lanzarBT(v);
     }
 
     //Lanza la conexion Bluetooth
     public void lanzarBT(View v) {
-        Intent i = new Intent(this, BluetoothActivity.class );
-        startActivityForResult(i, REQUEST_CONNECT_DEVICE);
+
+        if (!mBluetoothAdapter.isEnabled()) {
+            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+            // En otro caso, iniciamos
+        }else {
+            Intent i = new Intent(this, BluetoothActivity.class);
+            startActivityForResult(i, REQUEST_CONNECT_DEVICE);
+        }
     }
 
     public void lanzarGR(View v) { //**********************************************************************
@@ -173,10 +174,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(getPosEjeX()!=0) {
             startActivity(j);
         }else{
-            Toast.makeText(getApplicationContext(), "Warning: No se han recibido ningún valor del encoder.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,R.string.encoderNoDefinido, Toast.LENGTH_SHORT).show();
         }
     }
-
 
     @Override
     public synchronized void onPause() {
@@ -184,15 +184,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(D) Log.e(TAG, "- ON PAUSE -");
     }
 
-
-
     @Override
     public void onStop() {
         super.onStop();
         if(D) Log.e(TAG, "-- ON STOP --");
     }
 
-    //repasar
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -207,16 +204,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // get selected radio button from radioGroup
         int selectedId = radioGroupMio.getCheckedRadioButtonId();
 
-        // find the radiobutton by returned id
-        //radioButtonMio = (RadioButton) findViewById(selectedId);
-
-        switch (movement){
-            case (MOVE_PLAY):
-                seleccionAlgoritmo(selectedId);
-                break;
-            case (MOVE_STOP):
-                stopMotor();
-                break;
+        if(mConnectedDeviceName==null){
+            Toast.makeText(this,R.string.bluetoothNoConectado, Toast.LENGTH_SHORT).show();
+        }else {
+            switch (movement) {
+                case (MOVE_PLAY):
+                    seleccionAlgoritmo(selectedId);
+                    break;
+                case (MOVE_STOP):
+                    stopMotor();
+                    break;
+            }
         }
     }
 
@@ -398,10 +396,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return valueString;
     }
 
-    //nombre dispositivo conectado
-    private String mConnectedDeviceName = null;
-
-
     //recibe info de BluetoothService
     private final Handler mHandler = new Handler() {
         @Override
@@ -416,29 +410,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 case MESSAGE_TOAST:
                     Toast.makeText(getApplicationContext(), getString((int) msg.getData().getLong(TOAST)), Toast.LENGTH_SHORT).show();
                     break;
-                /*case MESSAGE_READ:
-                    //int bytes = msg.arg1;
-                    // Obtenemos la cadena de bytes recibidos
-                    byte[] readBuf = (byte[]) msg.obj;
-                    // Pasamos a string
-                    String readMessage = new String(readBuf, 0, msg.arg1);
-                    String sbprint="";
-
-                    sb.append(readMessage);
-                    int endOfLineIndex = sb.indexOf("\r\n");
-
-                    //Toast.makeText(getApplicationContext(), "bytes salida 1 " + " " + readMessage, Toast.LENGTH_SHORT).show();
-
-                    if(endOfLineIndex > 0) {
-                        sbprint = sb.substring(0, endOfLineIndex);
-                        sb.delete(0, sb.length());
-                    }
-
-
-                    Toast.makeText(getApplicationContext(), "bytes salida 2 " + " " + sb.toString(), Toast.LENGTH_SHORT).show();
-                    break;*/
                 case MESSAGE_READ:
-                    //int bytes = msg.arg1;
                     // Obtenemos la cadena de bytes recibidos
                     byte[] readBuf = (byte[]) msg.obj;
                     // Pasamos a string
@@ -446,30 +418,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     String sbprint="";
 
                     boolean esNumero = isNumeric(readMessage);
-
                     sb.append(readMessage);
 
                     if(!esNumero){
                         sb.delete(0, sb.length());
                     }
 
-                    //Toast.makeText(getApplicationContext(), "parte  " + sb.toString() + " " + esNumero, Toast.LENGTH_SHORT).show();
-
-                    //Toast.makeText(getApplicationContext(), "bytes salida 2 " + " " + sb.toString(), Toast.LENGTH_SHORT).show();
                     if(sb.length()==3){
                         try {
                             vecValoresEjeX[posEjeX] = Double.parseDouble(sb.toString());
-                            //Toast.makeText(getApplicationContext(), "bytes " + vecValoresEjeX[posEjeX], Toast.LENGTH_SHORT).show();
                             posEjeX++;
-                            //Toast.makeText(getApplicationContext(), "bytes " + Double.parseDouble(sb.toString()) + " " + esNumero, Toast.LENGTH_SHORT).show();
-
                             sb.delete(0, sb.length());
                         }catch (Exception e){
-                            Toast.makeText(getApplicationContext(), "Excepcion " + sb.toString() + " psocion " + posEjeX + " aa " + Double.parseDouble(sb.toString()), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Excepción " + sb.toString(), Toast.LENGTH_SHORT).show();
                         }
                     }
-
-                    //Toast.makeText(getApplicationContext(), "bytes salida 2 " + " " + sb.toString(), Toast.LENGTH_SHORT).show();
                     break;
             }
         }
@@ -499,22 +462,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     protected int getVelDeseada(){
-        //speed=150;
         return speed;
     }
 
     public static double[] getVelEncoder(){
-        /*if(vecValoresEjeX.length==0){
-            Toast.makeText(getApplicationContext(), "test ", Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(getApplicationContext(), "salida ", Toast.LENGTH_SHORT).show();
-        }*/
-        //Toast.makeText(getApplicationContext(), "test ", Toast.LENGTH_SHORT).show();
-        /*for(int i=0; i<vecValoresEjeX.length;i++){
-                Toast.makeText(getApplicationContext(), "MainEjeX " + vecValoresEjeX, Toast.LENGTH_SHORT).show();
-
-        }*/
-        //Toast.makeText(getApplicationContext(), "salida ", Toast.LENGTH_SHORT).show();
         return vecValoresEjeX;
     }
 

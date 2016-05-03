@@ -23,6 +23,15 @@
     <string name="kPincorrecta">Constante K entre 0 y 255</string>
     <string name="kPIincorrecta">Constante K entre 0 y 255</string>
     <string name="tiempoIncorrecta">Tiempo entre 0 y 255</string>
+    <string name="encoderNoDefinido">No se han recibido ningún valor del encoder.</string>
+    <string name="bluetoothNoConectado">Ningún dispositivo Bluetooth conectado.</string>
+    <string name="menu_bluetooth">Bluetooth</string>
+    <string name="menu_graphics">Graficas</string>
+    <string name="menu_info">Info</string>
+    <string name="no_conectado">No conectado</string>
+    <string name="conectando_con">Conectando con %s …</string>
+    <string name="conectado_a">Conectado a %s</string>
+    <string name="escaneando_dispositivos">Escaneando dispositivos…</string>
 
 
 
