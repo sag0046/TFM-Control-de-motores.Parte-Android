@@ -1,5 +1,7 @@
 package es.ubu.tfm.piapp;
 
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
@@ -518,6 +520,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 lanzarGR();
                 return true;
             case R.id.menu_info:
+                // Mostramos dialogo con la información de la aplicación
+                AlertDialog.Builder builder = new Builder(this);
+                builder.setTitle(R.string.about);
+                builder.setIcon(android.R.drawable.ic_menu_info_details);
+                builder.setMessage(getString(R.string.author) + ":" + '\n' +
+                        "Sandra Ajates Glez" + '\n' + '\n' +
+                        getString(R.string.tutor) + ":" + '\n' +
+                        "Alejandro Merino Gómez" + '\n' + '\n' +
+                        getString(R.string.version) + ":" + '\n' +
+                        "2016, Version 1.0" + '\n' + '\n' +
+                        getString(R.string.license) + ":" +'\n'+
+                        "Apache License, Version 2.0");
+                builder.create();
+                builder.show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

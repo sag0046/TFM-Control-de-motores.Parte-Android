@@ -33,6 +33,11 @@
     <string name="conectado_a">Conectado a %s</string>
     <string name="escaneando_dispositivos">Escaneando dispositivos…</string>
 
+    <string name="about">Acerca de PIapp</string>
+    <string name="author">Autor</string>
+    <string name="tutor">Tutor</string>
+    <string name="license">Licencia</string>
+    <string name="version">Version</string>
 
 
 </resources>
