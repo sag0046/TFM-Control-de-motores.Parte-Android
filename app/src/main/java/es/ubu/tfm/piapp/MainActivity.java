@@ -7,11 +7,13 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.view.MotionEventCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -76,8 +78,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         Typeface iconFont = FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME);
         FontManager.markAsIconContainer(findViewById(R.id.icons_container), iconFont);
-        FontManager.markAsIconContainer(findViewById(R.id.btnBt), iconFont);
-        FontManager.markAsIconContainer(findViewById(R.id.btnGr), iconFont);
+        //FontManager.markAsIconContainer(findViewById(R.id.btnBt), iconFont);
+        //FontManager.markAsIconContainer(findViewById(R.id.btnGr), iconFont);
 
         // Obtenemos el adaptador Bluetooth
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -93,21 +95,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Button btnPlay = (Button)findViewById(R.id.play);
         Button btnStop = (Button)findViewById(R.id.stop);
-        Button btnGr = (Button)findViewById(R.id.btnGr);
-        Button btnBt = (Button)findViewById(R.id.btnBt);
+        //Button btnGr = (Button)findViewById(R.id.btnGr);
+        //Button btnBt = (Button)findViewById(R.id.btnBt);
 
         btnPlay.setOnClickListener(this);
         btnStop.setOnClickListener(this);
-        btnGr.setOnClickListener(this);
-        btnBt.setOnClickListener(this);
-
+        //btnGr.setOnClickListener(this);
+        //btnBt.setOnClickListener(this);
 
         getSupportActionBar().setSubtitle(getString(R.string.no_conectado));
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(ContextCompat.getDrawable(this,R.drawable.ic_logo_ubu));
-
-
     }
+
 
     @Override
     public void onClick(View v) {
@@ -118,12 +118,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case (R.id.stop):
                 move(MOVE_STOP);
                 break;
-            case (R.id.btnGr):
-                lanzarGR(v);
+            /*case (R.id.btnGr):
+                lanzarGR();
                 break;
             case (R.id.btnBt):
-                lanzarBT(v);
-                break;
+                lanzarBT();
+                break;*/
 
         }
     }
@@ -158,8 +158,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     //Lanza la conexion Bluetooth
-    public void lanzarBT(View v) {
-
+    public void lanzarBT() {
         if (!mBluetoothAdapter.isEnabled()) {
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
@@ -170,7 +169,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void lanzarGR(View v) { //**********************************************************************
+
+    public void lanzarGR() { //**********************************************************************
         Intent j = new Intent(this, GraphActivity.class );
         if(getPosEjeX()!=0) {
             startActivity(j);
@@ -225,10 +225,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Obtenemos la cadena de bytes a enviar
         byte[] send = message.getBytes();
         mService.write(send);
-
     }
-    private void seleccionAlgoritmo(int algoritmo) {
 
+    private void seleccionAlgoritmo(int algoritmo) {
         switch (algoritmo){
             case R.id.rdProporcional:
                 Toast toast32 =
@@ -406,10 +405,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 case MESSAGE_DEVICE_CONNECTED:
                     //CONECTADO CON EL DISPOSITIVO, POR TANTO SE PUEDE ENVIAR LA SEÑAL AL DISPOSITIVO BLUETOOTH PARA LEERSE EN EL CASE MESSAGE_READ
                     //mService.write();
+                    mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
+                    getSupportActionBar().setSubtitle(String.format(getString(R.string.conectado_a),mConnectedDeviceName));
                     break;
                 // Mensaje a mostrar al usuario
                 case MESSAGE_TOAST:
                     Toast.makeText(getApplicationContext(), getString((int) msg.getData().getLong(TOAST)), Toast.LENGTH_SHORT).show();
+                    getSupportActionBar().setSubtitle(getString((int) msg.getData().getLong(TOAST)));
                     break;
                 case MESSAGE_READ:
                     // Obtenemos la cadena de bytes recibidos
@@ -438,8 +440,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     };
-
-
 
 
     @Override
@@ -500,4 +500,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static int getPosEjeX() {
         return posEjeX;
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.activity_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_bluetooth:
+                lanzarBT();
+                return true;
+            case R.id.menu_graphics:
+                lanzarGR();
+                return true;
+            case R.id.menu_info:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 }
