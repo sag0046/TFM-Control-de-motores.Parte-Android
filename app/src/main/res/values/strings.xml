@@ -32,6 +32,7 @@
     <string name="conectando_con">Conectando con %s …</string>
     <string name="conectado_a">Conectado a %s</string>
     <string name="escaneando_dispositivos">Escaneando dispositivos…</string>
+    <string name="menu_atras">Atras</string>
 
     <string name="about">Acerca de PIapp</string>
     <string name="author">Autor</string>

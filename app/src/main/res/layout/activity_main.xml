@@ -34,6 +34,7 @@
         android:layout_width="40sp"
         android:layout_height="wrap_content"
         android:inputType="numberDecimal"
+        android:maxLength="3"
         android:id="@+id/txtVelocidad" />
     </LinearLayout>
 
@@ -81,6 +82,7 @@
             android:layout_width="40sp"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
+            android:maxLength="3"
             android:id="@+id/txtConstanteP" />
        </LinearLayout>
 
@@ -110,6 +112,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
                 android:enabled="false"
+                android:maxLength="3"
                 android:id="@+id/txtConstantePI" />
 
             <TextView
@@ -124,6 +127,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
                 android:enabled="false"
+                android:maxLength="3"
                 android:id="@+id/txtTiempo" />
 
         </LinearLayout>

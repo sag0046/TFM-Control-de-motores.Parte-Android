@@ -2,6 +2,7 @@ package es.ubu.tfm.piapp;
 
 import java.util.Set;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -12,7 +13,11 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
@@ -27,7 +32,7 @@ import android.widget.Toast;
 /**
  * Created by Sandra on 28/02/2016.
  */
-public class BluetoothActivity extends Activity {
+public class BluetoothActivity extends AppCompatActivity {
     // Debugging
     private static final String TAG = "DeviceListActivity";//modificar
     private static final boolean D = true;
@@ -62,6 +67,9 @@ public class BluetoothActivity extends Activity {
         } else {
             if (mService == null) startBluetoothService();
         }*/
+
+        //getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //getSupportActionBar().setIcon(ContextCompat.getDrawable(this, R.drawable.ic_logo_ubu));
 
         // Inicializamos el boton qe permite descubrir nuevos dispositivos
         Button scanButton = (Button) findViewById(R.id.btnActivar);
@@ -230,6 +238,43 @@ public class BluetoothActivity extends Activity {
             }
         }
     };
+
+    /*@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.activity_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_bluetooth:
+                //lanzarBT();
+                return true;
+            case R.id.menu_graphics:
+                //lanzarGR();
+                return true;
+            case R.id.menu_info:
+                // Mostramos dialogo con la información de la aplicación
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.about);
+                builder.setIcon(android.R.drawable.ic_menu_info_details);
+                builder.setMessage(getString(R.string.author) + ":" + '\n' +
+                        "Sandra Ajates Glez" + '\n' + '\n' +
+                        getString(R.string.tutor) + ":" + '\n' +
+                        "Alejandro Merino Gómez" + '\n' + '\n' +
+                        getString(R.string.version) + ":" + '\n' +
+                        "2016, Version 1.0" + '\n' + '\n' +
+                        getString(R.string.license) + ":" +'\n'+
+                        "Apache License, Version 2.0");
+                builder.create();
+                builder.show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }*/
 
 
 }
