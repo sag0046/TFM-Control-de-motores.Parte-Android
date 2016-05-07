@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/menu_atras"
-        android:icon="@drawable/ic_action_bluetooth"
+        android:icon="@drawable/ic_action_back"
         app:showAsAction="always|withText"
         android:title="@string/menu_atras" />
 

@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="es.ubu.tfm.piapp.MainActivity">
+    tools:context=".controlador.MainActivity">
 
 
     <!--VELOCIDAD DE REFERENCIA PARA AMBOS ALGORITMOS -->
@@ -23,20 +23,24 @@
         android:layout_height="wrap_content"
         android:weightSum="1">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/velocidad"
-        android:id="@+id/lblVelocidad" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/velocidad"
+            android:id="@+id/lblVelocidad" />
 
-    <EditText
-        android:layout_width="40sp"
-        android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:maxLength="3"
-        android:id="@+id/txtVelocidad" />
+        <EditText
+            android:layout_width="40sp"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:maxLength="3"
+            android:id="@+id/txtVelocidad" />
     </LinearLayout>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="40dp"></TableRow>
 
     <!--Eleccion de algoritmo -->
     <TextView
@@ -51,49 +55,49 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"></TableRow>
 
-     <RadioGroup android:id="@+id/GrbGrupo1"
+    <RadioGroup android:id="@+id/GrbGrupo1"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-      <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="elegirAlgoritmo"
-        android:text="Accion Proporcional"
-        android:id="@+id/rdProporcional"
-        android:checked="true"/>
-
-
-      <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:weightSum="1">
-
-        <TextView
+        <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/constante"
-            android:id="@+id/lblConstanteP" />
+            android:onClick="elegirAlgoritmo"
+            android:text="Accion Proporcional"
+            android:id="@+id/rdProporcional"
+            android:checked="true"/>
 
-        <EditText
-            android:layout_width="40sp"
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:maxLength="3"
-            android:id="@+id/txtConstanteP" />
-       </LinearLayout>
+            android:weightSum="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/constante"
+                android:id="@+id/lblConstanteP" />
+
+            <EditText
+                android:layout_width="40sp"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:maxLength="3"
+                android:id="@+id/txtConstanteP" />
+        </LinearLayout>
 
 
 
-     <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/integral"
-        android:onClick="elegirAlgoritmo"
-        android:id="@+id/rdIntegral" />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/integral"
+            android:onClick="elegirAlgoritmo"
+            android:id="@+id/rdIntegral" />
 
         <LinearLayout
             android:orientation="horizontal"
@@ -144,7 +148,7 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
-        tools:context=".MainActivity">
+        tools:context=".controlador.MainActivity">
 
         <Button
             android:layout_width="match_parent"

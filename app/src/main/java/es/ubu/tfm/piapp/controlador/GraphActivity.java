@@ -1,9 +1,8 @@
-package es.ubu.tfm.piapp;
+package es.ubu.tfm.piapp.controlador;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.widget.AbsListView;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
@@ -19,13 +18,11 @@ import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 
 
-
-import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
-import android.os.Bundle;
 import android.os.Handler;
-import android.widget.Toast;
+
+import es.ubu.tfm.piapp.R;
 
 public class GraphActivity extends Activity {
 

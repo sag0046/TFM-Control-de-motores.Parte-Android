@@ -1,4 +1,4 @@
-package es.ubu.tfm.piapp;
+package es.ubu.tfm.piapp.modelo;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,6 +12,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+
+import es.ubu.tfm.piapp.controlador.MainActivity;
+import es.ubu.tfm.piapp.R;
 
 
 public class BluetoothService {
@@ -34,6 +37,9 @@ public class BluetoothService {
     private final BluetoothAdapter mAdapter; //adaptador BT
     private final Handler mHandler; //Handler
     private int mState;//estado
+
+    private MainActivity mainPrinc = new MainActivity();
+
 
     //Se encarga de preparar una sesion BT
     public BluetoothService(Context context, Handler handler) {
@@ -164,6 +170,8 @@ public class BluetoothService {
         bundle.putLong(MainActivity.TOAST, R.string.lost_connection);
         msg.setData(bundle);
         mHandler.sendMessage(msg);
+
+        mainPrinc.setEstadoConexion();
 
         // Reiniciamos
         restart();

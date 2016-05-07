@@ -1,4 +1,4 @@
-package es.ubu.tfm.piapp;
+package es.ubu.tfm.piapp.controlador;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -10,13 +10,12 @@ import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,9 +23,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
+import es.ubu.tfm.piapp.FontManager;
+import es.ubu.tfm.piapp.R;
+import es.ubu.tfm.piapp.modelo.BluetoothService;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -62,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static int t;
     public static double [] vecValoresEjeX = new double[2000];
     public static int posEjeX=0;
+    public static boolean deviceConnected=false;
 
     //Servicio BT
     private BluetoothService mService = null;
@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // get selected radio button from radioGroup
         int selectedId = radioGroupMio.getCheckedRadioButtonId();
 
-        if(mConnectedDeviceName==null){
+        if(deviceConnected==false){
             Toast.makeText(this,R.string.bluetoothNoConectado, Toast.LENGTH_SHORT).show();
         }else {
             switch (movement) {
@@ -224,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void stopMotor() {
         message = "S";
         //message = "0000,0000";
-        // Obtenemos la cadena de bytes a enviar
+        // Obtenemos ldeviceConnecteda cadena de bytes a enviar
         byte[] send = message.getBytes();
         mService.write(send);
     }
@@ -407,8 +407,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 case MESSAGE_DEVICE_CONNECTED:
                     //CONECTADO CON EL DISPOSITIVO, POR TANTO SE PUEDE ENVIAR LA SEÑAL AL DISPOSITIVO BLUETOOTH PARA LEERSE EN EL CASE MESSAGE_READ
                     //mService.write();
-                    mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
-                    getSupportActionBar().setSubtitle(String.format(getString(R.string.conectado_a),mConnectedDeviceName));
+                    //mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
+                    //getSupportActionBar().setSubtitle(String.format(getString(R.string.conectado_a),mConnectedDeviceName));
+                    getSupportActionBar().setSubtitle(Html.fromHtml("<small>" + getString(R.string.conectado_a) + mConnectedDeviceName + "</small>"));
+
+                    deviceConnected=true;
                     break;
                 // Mensaje a mostrar al usuario
                 case MESSAGE_TOAST:
@@ -503,10 +506,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return posEjeX;
     }
 
+    public static void setEstadoConexion(){
+        deviceConnected=false;
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.activity_main, menu);
+        getMenuInflater().inflate(R.menu.mn_activity_bar, menu);
         return true;
     }
 
@@ -527,7 +534,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 builder.setMessage(getString(R.string.author) + ":" + '\n' +
                         "Sandra Ajates Glez" + '\n' + '\n' +
                         getString(R.string.tutor) + ":" + '\n' +
-                        "Alejandro Merino Gómez" + '\n' + '\n' +
+                        "Alejandro Gómez Merino" + '\n' + '\n' +
                         getString(R.string.version) + ":" + '\n' +
                         "2016, Version 1.0" + '\n' + '\n' +
                         getString(R.string.license) + ":" +'\n'+

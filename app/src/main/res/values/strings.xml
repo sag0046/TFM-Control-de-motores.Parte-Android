@@ -7,8 +7,8 @@
     <string name="tiempo">T.Integral(s-1)</string>
     <string name="integral">Accion Integral</string>
     <string name="imposible_to_connect">Imposible conectar con el dispositivo</string>
-    <string name="lost_connection">Perdida conexión con el dispositivo</string>
-    <string name="scanning">Escaneando dispositivos...</string>
+    <string name="lost_connection">Pérdida conexión con el dispositivo</string>
+    <string name="scanning">Escaneando...</string>
     <string name="seleccionar_dispositivo">Seleccione un dispositivo para conectarse</string>
     <string name="no_emparejados">Ningun dispositivo ha sido emparejado</string>
     <string name="no_encontrado">No se ha encontrado ningun dispositivo</string>
@@ -30,8 +30,7 @@
     <string name="menu_info">Info</string>
     <string name="no_conectado">No conectado</string>
     <string name="conectando_con">Conectando con %s …</string>
-    <string name="conectado_a">Conectado a %s</string>
-    <string name="escaneando_dispositivos">Escaneando dispositivos…</string>
+    <string name="conectado_a">Conectado </string>
     <string name="menu_atras">Atras</string>
 
     <string name="about">Acerca de PIapp</string>

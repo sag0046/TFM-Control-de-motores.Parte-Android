@@ -1,4 +1,4 @@
-package es.ubu.tfm.piapp;
+package es.ubu.tfm.piapp.controlador;
 
 import java.util.Set;
 import android.app.Activity;
@@ -9,6 +9,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,9 +30,10 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Toast;
 
-/**
- * Created by Sandra on 28/02/2016.
- */
+import es.ubu.tfm.piapp.FontManager;
+import es.ubu.tfm.piapp.R;
+
+
 public class BluetoothActivity extends AppCompatActivity {
     // Debugging
     private static final String TAG = "DeviceListActivity";//modificar
@@ -48,8 +50,9 @@ public class BluetoothActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Establecemos la ventana y el layout
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        //requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.bt_activity);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         // Ponemos el resultado CANCELED en caso de que el usuario vuelva hacia atras
         setResult(Activity.RESULT_CANCELED);
         Typeface iconFont = FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME);
@@ -68,8 +71,11 @@ public class BluetoothActivity extends AppCompatActivity {
             if (mService == null) startBluetoothService();
         }*/
 
-        //getSupportActionBar().setDisplayShowHomeEnabled(true);
-        //getSupportActionBar().setIcon(ContextCompat.getDrawable(this, R.drawable.ic_logo_ubu));
+        //getSupportActionBar().setSubtitle(getString(R.string.no_conectado));
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(ContextCompat.getDrawable(this, R.drawable.ic_logo_ubu));
+        //getSupportActionBar().setHomeButtonEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Inicializamos el boton qe permite descubrir nuevos dispositivos
         Button scanButton = (Button) findViewById(R.id.btnActivar);
@@ -175,7 +181,8 @@ public class BluetoothActivity extends AppCompatActivity {
 
         // Cambiamos el titulo a escaneando
         setProgressBarIndeterminateVisibility(true);
-        setTitle(R.string.scanning);
+       // setTitle(R.string.scanning);
+        getSupportActionBar().setSubtitle(getString(R.string.scanning));
 
         // Habilitamos la visibilidad del sub-titulo de nuevos dispositivos
         findViewById(R.id.lblnuevosDispositivos).setVisibility(View.VISIBLE);
@@ -190,7 +197,7 @@ public class BluetoothActivity extends AppCompatActivity {
     }
 
 
-      //onClickListener para todos los disp. en el listView
+    //onClickListener para todos los disp. en el listView
     private OnItemClickListener mDeviceClickListener = new OnItemClickListener() {
         public void onItemClick(AdapterView<?> av, View v, int arg2, long arg3) {
             // Cancelamos el descubrimiento porque es costosa y estamos a punto de conectar
@@ -239,21 +246,19 @@ public class BluetoothActivity extends AppCompatActivity {
         }
     };
 
-    /*@Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.activity_main, menu);
+        getMenuInflater().inflate(R.menu.bt_activity_bar, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_bluetooth:
-                //lanzarBT();
-                return true;
-            case R.id.menu_graphics:
-                //lanzarGR();
+            case R.id.menu_atras:
+                // app icon in action bar clicked; goto parent activity.
+                this.finish();
                 return true;
             case R.id.menu_info:
                 // Mostramos dialogo con la información de la aplicación
@@ -261,9 +266,9 @@ public class BluetoothActivity extends AppCompatActivity {
                 builder.setTitle(R.string.about);
                 builder.setIcon(android.R.drawable.ic_menu_info_details);
                 builder.setMessage(getString(R.string.author) + ":" + '\n' +
-                        "Sandra Ajates Glez" + '\n' + '\n' +
+                        "AAAA XXX CCCCC" + '\n' + '\n' +
                         getString(R.string.tutor) + ":" + '\n' +
-                        "Alejandro Merino Gómez" + '\n' + '\n' +
+                        "AAAA AAAAA AAA" + '\n' + '\n' +
                         getString(R.string.version) + ":" + '\n' +
                         "2016, Version 1.0" + '\n' + '\n' +
                         getString(R.string.license) + ":" +'\n'+
@@ -274,7 +279,6 @@ public class BluetoothActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }*/
-
+    }
 
 }
