@@ -232,19 +232,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void seleccionAlgoritmo(int algoritmo) {
         switch (algoritmo){
             case R.id.rdProporcional:
-                Toast toast32 =
-                        Toast.makeText(getApplicationContext(),
-                                " algoritmo 1", Toast.LENGTH_SHORT);
-
-                toast32.show();
+                //Toast toast32 = Toast.makeText(getApplicationContext(), " algoritmo 1", Toast.LENGTH_SHORT);
+                //toast32.show();
                 algoritmoProporcional();
                 break;
             case R.id.rdIntegral:
-                Toast toast33 =
-                        Toast.makeText(getApplicationContext(),
-                                "algoritmo 2", Toast.LENGTH_SHORT);
-
-                toast33.show();
+                //Toast toast33 = Toast.makeText(getApplicationContext(), "algoritmo 2", Toast.LENGTH_SHORT);
+                //toast33.show();
                 algoritmoIntegral();
                 break;
         }
@@ -369,11 +363,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Obtenemos la cadena de bytes a enviar
         byte[] send = message.getBytes();
 
-        Toast toast1 =
-                Toast.makeText(getApplicationContext(),
-                        send.toString(), Toast.LENGTH_SHORT);
-
-        toast1.show();
+        //Toast toast1 = Toast.makeText(getApplicationContext(), send.toString(), Toast.LENGTH_SHORT);
+        //toast1.show();
 
         // Reseteo variable posición Array datos a recibir por Bluetooth
         setPosEjeX();
@@ -409,7 +400,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //mService.write();
                     //mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
                     //getSupportActionBar().setSubtitle(String.format(getString(R.string.conectado_a),mConnectedDeviceName));
-                    getSupportActionBar().setSubtitle(Html.fromHtml("<small>" + getString(R.string.conectado_a) + mConnectedDeviceName + "</small>"));
+                    getSupportActionBar().setSubtitle(Html.fromHtml("<small>" + getString(R.string.conectado_a) + " " + mConnectedDeviceName + "</small>"));
 
                     deviceConnected=true;
                     break;
@@ -534,7 +525,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 builder.setMessage(getString(R.string.author) + ":" + '\n' +
                         "Sandra Ajates Glez" + '\n' + '\n' +
                         getString(R.string.tutor) + ":" + '\n' +
-                        "Alejandro Gómez Merino" + '\n' + '\n' +
+                        "Alejandro Merino Gómez" + '\n' + '\n' +
                         getString(R.string.version) + ":" + '\n' +
                         "2016, Version 1.0" + '\n' + '\n' +
                         getString(R.string.license) + ":" +'\n'+

@@ -18,7 +18,7 @@
     <string name="no_vel">Introduzca una velocidad valida</string>
     <string name="no_kp">Introduzca una constante valida</string>
     <string name="no_kpi">Introduzca una constante valida</string>
-    <string name="no_t">Introduzca una tiempo valido</string>
+    <string name="no_t">Introduzca un tiempo valido</string>
     <string name="velocidadIncorrecta">Velocidad entre 0 y 255</string>
     <string name="kPincorrecta">Constante K entre 0 y 255</string>
     <string name="kPIincorrecta">Constante K entre 0 y 255</string>
@@ -30,7 +30,7 @@
     <string name="menu_info">Info</string>
     <string name="no_conectado">No conectado</string>
     <string name="conectando_con">Conectando con %s …</string>
-    <string name="conectado_a">Conectado </string>
+    <string name="conectado_a">Conectado a</string>
     <string name="menu_atras">Atras</string>
 
     <string name="about">Acerca de PIapp</string>

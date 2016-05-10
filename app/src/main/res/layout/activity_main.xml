@@ -48,6 +48,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/RoyalBlue"
+        android:textStyle="bold"
         android:text="@string/algoritmos"
         android:textSize="20sp"
         android:id="@+id/lblAlgoritmos"/>

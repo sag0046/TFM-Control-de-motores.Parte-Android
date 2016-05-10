@@ -266,9 +266,9 @@ public class BluetoothActivity extends AppCompatActivity {
                 builder.setTitle(R.string.about);
                 builder.setIcon(android.R.drawable.ic_menu_info_details);
                 builder.setMessage(getString(R.string.author) + ":" + '\n' +
-                        "AAAA XXX CCCCC" + '\n' + '\n' +
+                        "Sandra Ajates Glez" + '\n' + '\n' +
                         getString(R.string.tutor) + ":" + '\n' +
-                        "AAAA AAAAA AAA" + '\n' + '\n' +
+                        "Alejandro Merino Gómez" + '\n' + '\n' +
                         getString(R.string.version) + ":" + '\n' +
                         "2016, Version 1.0" + '\n' + '\n' +
                         getString(R.string.license) + ":" +'\n'+
