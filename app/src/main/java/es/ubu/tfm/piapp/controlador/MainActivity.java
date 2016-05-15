@@ -418,7 +418,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     boolean esNumero = isNumeric(readMessage);
                     sb.append(readMessage);
-
+                    //Toast.makeText(getApplicationContext(), "bytes salida 1 " + " " + readMessage, Toast.LENGTH_SHORT).show();
                     if(!esNumero){
                         sb.delete(0, sb.length());
                     }
