@@ -17,6 +17,9 @@ import es.ubu.tfm.piapp.controlador.MainActivity;
 import es.ubu.tfm.piapp.R;
 
 
+/**
+ * The type Bluetooth service.
+ */
 public class BluetoothService {
 
     // Debugging
@@ -26,9 +29,18 @@ public class BluetoothService {
     // Identificador unico UUID para esta aplicación
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
 
-    // Constantes que indican el estado de la conexion actual
+    /**
+     * The constant STATE_NONE.
+     */
+// Constantes que indican el estado de la conexion actual
     public static final int STATE_NONE = 0;       // no estamos haciendo anda
+    /**
+     * The constant STATE_CONNECTING.
+     */
     public static final int STATE_CONNECTING = 1; // ahora inicializando una conexión saliente
+    /**
+     * The constant STATE_CONNECTED.
+     */
     public static final int STATE_CONNECTED = 2;  // ahora conectado con un dispositivo remoto
 
     // Campos miembros
@@ -41,7 +53,13 @@ public class BluetoothService {
     private MainActivity mainPrinc = new MainActivity();
 
 
-    //Se encarga de preparar una sesion BT
+    /**
+     * Instantiates a new Bluetooth service.
+     *
+     * @param context the context
+     * @param handler the handler
+     */
+//Se encarga de preparar una sesion BT
     public BluetoothService(Context context, Handler handler) {
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         mState = STATE_NONE;
@@ -57,12 +75,20 @@ public class BluetoothService {
         mHandler.obtainMessage(MainActivity.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
     }
 
-    //Devuelve el estado de conexion actual
+    /**
+     * Gets state.
+     *
+     * @return the state
+     */
+//Devuelve el estado de conexion actual
     public synchronized int getState() {
         return mState;
     }
 
-    //Se encarga de reiniciar el servicio cancelando todos los hilos de conexion
+    /**
+     * Restart.
+     */
+//Se encarga de reiniciar el servicio cancelando todos los hilos de conexion
     public synchronized void restart() {
 
         // Cancela cualquier Threads que estuviera intentado conectar
@@ -75,7 +101,12 @@ public class BluetoothService {
         setState(STATE_NONE);
     }
 
-    //Inicia el ConnectThread para inicilizar una conexion a un dispositivo remoto
+    /**
+     * Connect.
+     *
+     * @param device the device
+     */
+//Inicia el ConnectThread para inicilizar una conexion a un dispositivo remoto
     public synchronized void connect(BluetoothDevice device) {
         if (D) Log.d(TAG, "connect to: " + device);
 
@@ -95,7 +126,13 @@ public class BluetoothService {
         setState(STATE_CONNECTING);
     }
 
-   //Inicia el ConnectedThread para comenzar a gestionar una conexión Bluetooth
+    /**
+     * Connected.
+     *
+     * @param socket the socket
+     * @param device the device
+     */
+//Inicia el ConnectedThread para comenzar a gestionar una conexión Bluetooth
     public synchronized void connected(BluetoothSocket socket, BluetoothDevice device) {
         if (D) Log.d(TAG, "connected");
 
@@ -116,7 +153,10 @@ public class BluetoothService {
         setState(STATE_CONNECTED);
     }
 
-    //PARA todos los threads
+    /**
+     * Stop.
+     */
+//PARA todos los threads
     public synchronized void stop() {
         if (D) Log.d(TAG, "stop");
 
@@ -134,7 +174,12 @@ public class BluetoothService {
         setState(STATE_NONE);
     }
 
-    //Escribie en el ConnectedThread de una manera no sincronizada
+    /**
+     * Write.
+     *
+     * @param out the out
+     */
+//Escribie en el ConnectedThread de una manera no sincronizada
     // es decir, manda por conexión bluetooth la cadena de bytes.
     public void write(byte[] out) {
         ConnectedThread r; // Se crea un objeto temporal
@@ -182,7 +227,12 @@ public class BluetoothService {
         private final BluetoothSocket mmSocket;
         private final BluetoothDevice mmDevice; //dispositivo BT
 
-       //Constructor. Inicializa el Socket
+        /**
+         * Instantiates a new Connect thread.
+         *
+         * @param device the device
+         */
+//Constructor. Inicializa el Socket
         public ConnectThread(BluetoothDevice device) {
             mmDevice = device;
             BluetoothSocket tmp = null;
@@ -230,6 +280,9 @@ public class BluetoothService {
             connected(mmSocket, mmDevice);
         }
 
+        /**
+         * Cancel.
+         */
         public void cancel() {
             try {
                 mmSocket.close();
@@ -247,7 +300,12 @@ public class BluetoothService {
         private final InputStream mmInStream; //Stream entrada
         private final OutputStream mmOutStream; //Stream SAlida
 
-        //Constructor que obtiene ambos streams
+        /**
+         * Instantiates a new Connected thread.
+         *
+         * @param socket the socket
+         */
+//Constructor que obtiene ambos streams
         public ConnectedThread(BluetoothSocket socket) {
             mmSocket = socket;
             InputStream tmpIn = null;
@@ -289,7 +347,12 @@ public class BluetoothService {
             }
         }
 
-        //Escribe en el Stream de salida las cadena de bytes a enviar
+        /**
+         * Write.
+         *
+         * @param buffer the buffer
+         */
+//Escribe en el Stream de salida las cadena de bytes a enviar
         public void write(byte[] buffer) {
             try {
                 mmOutStream.write(buffer);
@@ -298,7 +361,10 @@ public class BluetoothService {
             }
         }
 
-      //cierra o cancela el Socket
+        /**
+         * Cancel.
+         */
+//cierra o cancela el Socket
         public void cancel() {
             try {
                 mmSocket.close();

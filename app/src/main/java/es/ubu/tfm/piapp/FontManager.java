@@ -11,13 +11,32 @@ import android.widget.TextView;
  */
 public class FontManager {
 
+    /**
+     * The constant ROOT.
+     */
     public static final String ROOT = "fonts/",
-            FONTAWESOME = ROOT + "fontawesome-webfont.ttf";
+    /**
+     * The Fontawesome.
+     */
+    FONTAWESOME = ROOT + "fontawesome-webfont.ttf";
 
+    /**
+     * Gets typeface.
+     *
+     * @param context the context
+     * @param font    the font
+     * @return the typeface
+     */
     public static Typeface getTypeface(Context context, String font) {
         return Typeface.createFromAsset(context.getAssets(), font);
     }
 
+    /**
+     * Mark as icon container.
+     *
+     * @param v        the v
+     * @param typeface the typeface
+     */
     public static void markAsIconContainer(View v, Typeface typeface) {
         if (v instanceof ViewGroup) {
             ViewGroup vg = (ViewGroup) v;

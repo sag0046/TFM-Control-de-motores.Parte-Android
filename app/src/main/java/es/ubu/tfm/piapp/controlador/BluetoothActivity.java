@@ -34,12 +34,18 @@ import es.ubu.tfm.piapp.FontManager;
 import es.ubu.tfm.piapp.R;
 
 
+/**
+ * The type Bluetooth activity.
+ */
 public class BluetoothActivity extends AppCompatActivity {
     // Debugging
     private static final String TAG = "DeviceListActivity";//modificar
     private static final boolean D = true;
 
-    // Retorno extra del Intent
+    /**
+     * The constant EXTRA_DEVICE_ADDRESS.
+     */
+// Retorno extra del Intent
     public static String EXTRA_DEVICE_ADDRESS = "device_address";
 
     private BluetoothAdapter mBtAdapter;//adaptador BT
@@ -58,18 +64,6 @@ public class BluetoothActivity extends AppCompatActivity {
         Typeface iconFont = FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME);
         FontManager.markAsIconContainer(findViewById(R.id.icons_container), iconFont);
         FontManager.markAsIconContainer(findViewById(R.id.btnActivar), iconFont);
-/*
-        // Obtenemos el adaptador Bluetooth
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        // Si el Bluetooth no está activo, requiere su activación.
-        // start() sera llamado en onActivityResult
-        if (!mBluetoothAdapter.isEnabled()) {
-            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-            // En otro caso, iniciamos
-        } else {
-            if (mService == null) startBluetoothService();
-        }*/
 
         //getSupportActionBar().setSubtitle(getString(R.string.no_conectado));
         getSupportActionBar().setDisplayShowHomeEnabled(true);

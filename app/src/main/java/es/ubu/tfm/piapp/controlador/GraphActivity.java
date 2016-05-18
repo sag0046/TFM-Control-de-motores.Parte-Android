@@ -24,6 +24,9 @@ import android.os.Handler;
 
 import es.ubu.tfm.piapp.R;
 
+/**
+ * The type Graph activity.
+ */
 public class GraphActivity extends Activity {
 
     private RelativeLayout graphLayout;
