@@ -1,6 +1,8 @@
 package es.ubu.tfm.piapp;
 
 
+import android.support.test.espresso.assertion.ViewAssertions;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.test.suitebuilder.annotation.LargeTest;
 
 import org.junit.Before;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 
 import java.lang.reflect.Method;
 
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static org.junit.Assert.*;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -52,6 +55,9 @@ public class TestMainActivity extends ActivityInstrumentationTestCase2<MainActiv
     // Resultado de invocaciones
     Object result;
 
+    //@Rule
+    //public ActivityTestRule<MainActivity> mActivityTest = new ActivityTestRule<>(MainActivity.class);
+
     public TestMainActivity() {
         super(MainActivity.class);
     }
@@ -59,10 +65,74 @@ public class TestMainActivity extends ActivityInstrumentationTestCase2<MainActiv
     @Override
     public void setUp() throws Exception {
         //getActivity();
-        mActivity = getActivity();
+        super.setUp();
+        getActivity();
 
-        //play = (ImageButton) mActivity.findViewById(R.id.play);
-        //lbSpeed = (TextView) mActivity.getView(R.id.lb_speed);
+    }
+
+    // Test validación básica botones.
+    @Test
+    public void testSimpleClickButton(){
+        try{
+            //Button play
+            onView(withId(R.id.play))
+                    .perform(click());
+
+            //Button stop
+            onView(withId(R.id.stop))
+                    .perform(click());
+
+            //Button Bluetooth
+            onView(withId(R.id.menu_bluetooth))
+                    .perform(click());
+
+            //Button Graphic
+            onView(withId(R.id.menu_graphics))
+                    .perform(click());
+
+            //Button info
+            onView(withId(R.id.menu_info))
+                    .perform(click());
+        } catch (Exception e) {
+            Log.e("PIapp", "Error al pulsar Button", e);
+        }
+    }
+
+    // Test validación básica textoslabels.
+    @Test
+    public void testSimpleLabelValue(){
+        try{
+            //Label Velocidad Referencia
+            onView(withId(R.id.lblVelocidad))
+                    .check(matches(withText("Velocidad de Referencia(rpm)")));
+
+            //Label Selección algoritmo
+            onView(withId(R.id.lblAlgoritmos))
+                    .check(matches(withText("Algoritmos de Control")));
+
+            //RadioButton Proporcional
+            onView(withId(R.id.rdProporcional))
+                    .check(matches(withText("Accion Proporcional")));
+
+            //Label Ganancia Proporcional algoritmo P
+            onView(withId(R.id.lblConstanteP))
+                    .check(matches(withText("Ganancia Proporcional")));
+
+            //RadioButton Integral
+            onView(withId(R.id.rdIntegral))
+                    .check(matches(withText("Accion Integral")));
+
+            //Label Ganancia Proporcional algoritmo PI
+            onView(withId(R.id.lblConstantePI))
+                    .check(matches(withText("Ganancia Proporcional")));
+
+            //Label Tiempo algoritmo PI
+            onView(withId(R.id.lblTiempo))
+                    .check(matches(withText("T.Integral(s-1)")));
+
+        } catch (Exception e) {
+            Log.e("PIapp", "Error al pulsar Button", e);
+        }
     }
 
     // Test validación parseo variables a enviar por Bluetooth
@@ -152,12 +222,84 @@ public class TestMainActivity extends ActivityInstrumentationTestCase2<MainActiv
                     .check(matches(isDisplayed()));
             */
         } catch (Exception e) {
-            Log.e("TestUbuBot", "Error al invocar el metodo setStatus", e);
+            Log.e("PIapp", "Error al invocar el metodo setStatus", e);
         }
     }
 
+    // Test validación rellenar Labels datos
+    @Test
+    public void testLabelsInformation(){
+        try {
+            String valor = "122";
+            onView(withId(R.id.txtVelocidad)).perform(typeText(valor));
+            //click on Send
+            onView(withId(R.id.play)).perform(click());
+            // verify is displayed
+            onView(withId(R.id.txtVelocidad)).check(ViewAssertions.matches(ViewMatchers.withText(valor)));
+
+        } catch (Exception e) {
+            Log.e("PIapp", "Error al validar los TextFiles", e);
+        }
+    }
+
+    // Test validación cambio estado del Bluetooth
+    @Test
+    public void testCheckValue(){
+        final Method methodCheckValue;
+        final Method methodSetEstadoConectado2;
+        final Method methodSetStatus3;
+        final Method methodSetStatus4;
+        try {
+            methodCheckValue = MainActivity.class.getDeclaredMethod("checkValue", Integer.class, Integer.class);
+            methodCheckValue.setAccessible(true);
 
 
+            getActivity().runOnUiThread(new Runnable() {
+                public void run(){
+                    try {
+                        result = methodCheckValue.invoke(getActivity());
+                    } catch (Exception e) {
+                        Log.e("PIapp", "Error al ejecutar el método methodCheckValue", e);
+                    }
+                }
+            });
+
+            Thread.sleep(60);
+
+            // Comprobamos que se ha cambiado el texto
+            /*onView(withId(R.id.name_field))
+                    .perform(typeText("Steve"));
+            onView(withId(R.id.greet_button))
+                    .perform(click());
+            onView(withText(R.string.conectado_a))
+                    .check(matches(isDisplayed()));
+            */
+            //assertTrue("Deberia mostrarse texto No conectado",solo.searchText(solo.getString(R.string.conectado_a)));
+
+            // Realizamos otra prueba
+            methodSetEstadoConectado2 = MainActivity.class.getDeclaredMethod("setEstadoConectado");
+            methodSetEstadoConectado2.setAccessible(true);
+
+            getActivity().runOnUiThread(new Runnable() {
+                public void run(){
+                    try {
+                        result = methodSetEstadoConectado2.invoke(getActivity(), R.string.no_conectado);
+                    } catch (Exception e) {
+                        Log.e("PIapp", "Error al ejecutar el método setEstadoConectado", e);
+                    }
+                }
+            });
+
+            Thread.sleep(60);
+
+            // Comprobamos que se ha cambiado el texto
+            /*onView(withId(R.id.menu_bluetooth))
+                    .check(matches(isDisplayed()));
+            */
+        } catch (Exception e) {
+            Log.e("PIapp", "Error al invocar el metodo setStatus", e);
+        }
+    }
 
     @Override
     public void tearDown() throws Exception {

@@ -27,9 +27,6 @@ import es.ubu.tfm.piapp.FontManager;
 import es.ubu.tfm.piapp.R;
 import es.ubu.tfm.piapp.modelo.BluetoothService;
 
-/**
- * The type Main activity.
- */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     // Debugging
@@ -41,77 +38,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int REQUEST_ENABLE_BT = 2;
     private static final int REQUEST_POINT = 3;
 
-    /**
-     * The constant MESSAGE_STATE_CHANGE.
-     */
-// Tipos de mensajes enviados desde el Handler de BluetoothService
+    // Tipos de mensajes enviados desde el Handler de BluetoothService
     public static final int MESSAGE_STATE_CHANGE = 1;
-    /**
-     * The constant MESSAGE_READ.
-     */
     public static final int MESSAGE_READ = 2;
-    /**
-     * The constant MESSAGE_DEVICE_CONNECTED.
-     */
     public static final int MESSAGE_DEVICE_CONNECTED = 3;
-    /**
-     * The constant MESSAGE_TOAST.
-     */
     public static final int MESSAGE_TOAST = 4;
 
-    /**
-     * The constant MOVE_STOP.
-     */
-//Códigos para ejecutar y parar
+    //Códigos para ejecutar y parar
     public static final int MOVE_STOP = 1;
-    /**
-     * The constant MOVE_PLAY.
-     */
     public static final int MOVE_PLAY = 2;
 
-    /**
-     * The constant DEVICE_NAME.
-     */
-// Nombres de claves recibidas desde el Handler de BluetoothService
+    // Nombres de claves recibidas desde el Handler de BluetoothService
     public static final String DEVICE_NAME = "device_name";
-    /**
-     * The constant TOAST.
-     */
     public static final String TOAST = "toast";
 
-    /**
-     * The constant message.
-     */
-// Variables algoritmo
+    // Variables algoritmo
     public static String message; //PIDE INICIALIZAR A NULL
     private StringBuilder sb = new StringBuilder();
-    /**
-     * The constant speed.
-     */
     public static int speed;
-    /**
-     * The constant k_P.
-     */
     public static int k_P; //cte k para algoritmo proporcional
-    /**
-     * The constant k_PI.
-     */
     public static int k_PI; // cte k para algoritmo PI
-    /**
-     * The constant t.
-     */
     public static int t;
-    /**
-     * The constant vecValoresEjeX.
-     */
     public static double [] vecValoresEjeX = new double[2000];
-    /**
-     * The constant posEjeX.
-     */
     public static int posEjeX=0;
-    /**
-     * The constant deviceConnected.
-     */
     public static boolean deviceConnected=false;
 
     //Servicio BT
@@ -131,7 +80,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         Typeface iconFont = FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME);
         FontManager.markAsIconContainer(findViewById(R.id.icons_container), iconFont);
-
 
         // Obtenemos el adaptador Bluetooth
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -166,16 +114,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case (R.id.stop):
                 move(MOVE_STOP);
                 break;
-
         }
     }
 
-    /**
-     * Elegir algoritmo.
-     *
-     * @param v the v
-     */
-//Check para elegir un algoritmo
+    //Check para elegir un algoritmo
     public void elegirAlgoritmo(View v) {
         switch(v.getId()) {
             case R.id.rdIntegral:
@@ -204,10 +146,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mService = new BluetoothService(this, mHandler);
     }
 
-    /**
-     * Lanzar bt.
-     */
-//Lanza la conexion Bluetooth
+    //Lanza la conexion Bluetooth
     public void lanzarBT() {
         if (!mBluetoothAdapter.isEnabled()) {
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -220,10 +159,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    /**
-     * Lanzar gr.
-     */
-    public void lanzarGR() { //**********************************************************************
+    public void lanzarGR() {
         Intent j = new Intent(this, GraphActivity.class );
         if(getPosEjeX()!=0) {
             startActivity(j);
@@ -258,6 +194,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // get selected radio button from radioGroup
         int selectedId = radioGroupMio.getCheckedRadioButtonId();
 
+        //deviceConnected=true;
+
         if(deviceConnected==false){
             Toast.makeText(this,R.string.bluetoothNoConectado, Toast.LENGTH_SHORT).show();
         }else {
@@ -283,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void seleccionAlgoritmo(int algoritmo) {
         switch (algoritmo){
             case R.id.rdProporcional:
-                //Toast toast32 = Toast.makeText(getApplicationContext(), " algoritmo 1", Toast.LENGTH_SHORT);
+                //Toast toast32 = Toast.makeText(getApplicationContext(), "algoritmo 1", Toast.LENGTH_SHORT);
                 //toast32.show();
                 algoritmoProporcional();
                 break;
@@ -316,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        //Comprobamos si esta en el rango la vel, k_P
+ /*       //Comprobamos si esta en el rango la vel, k_P
         if(speed > 255 || speed < 0){
             Toast.makeText(this, R.string.velocidadIncorrecta, Toast.LENGTH_SHORT).show();
             return;
@@ -325,45 +263,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this, R.string.kPincorrecta, Toast.LENGTH_SHORT).show();
             return;
         }
+ */
 
-        message = "P" + passToString(speed) + passToString(k_P) /*+ passToString(500)*/;
-        //message = "0000,0000";
+        //Comprobamos si esta en el rango la velocidad
+        if(checkValue(speed, R.string.velocidadIncorrecta)==false){
+            return;
+        }
+
+        //Comprobamos si esta en el rango la constante k_P
+        if(checkValue(k_P, R.string.kPIincorrecta)==false){
+            return;
+        }
+
+        message = "P" + passToString(speed) + passToString(k_P);
 
         // Reseteo variable posición Array datos a recibir por Bluetooth
         setPosEjeX();
         // Obtenemos la cadena de bytes a enviar
         byte[] send = message.getBytes();
 
-        /*String parte1 = "P";
-
-        // Obtenemos la cadena de bytes a enviar
-        byte[] send2 = new byte[0];
-        try {
-            send2 = parte1.getBytes("ASCII");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        String str="";
-
-        try {
-            str = new String(send, "ASCII"); // for UTF-8 encoding
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }*/
-
-        Toast toast1 =
-                Toast.makeText(getApplicationContext(),
-                        send.toString()+ " parte 1: "+ message, Toast.LENGTH_SHORT);
-
-        toast1.show();
+        //Toast toast1 = Toast.makeText(getApplicationContext(), send.toString()+ " parte 1: "+ message, Toast.LENGTH_SHORT);
+        //toast1.show();
 
         // Enviamos el mensaje
         mService.write(send);
     }
 
-    /**
-     *
-     */
     private void algoritmoIntegral() {
         //Recogemos los valores de Velocidad, k, tiempo
         EditText speedTxt = (EditText)findViewById(R.id.txtVelocidad);
@@ -393,6 +318,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
+        //Comprobamos si esta en el rango la velocidad
+        if(checkValue(speed, R.string.velocidadIncorrecta)==false){
+            return;
+        }
+
+        //Comprobamos si esta en el rango la constante k_PI
+        if(checkValue(k_PI, R.string.kPIincorrecta)==false){
+            return;
+        }
+
+        //Comprobamos si esta en el rango la constante tiempo
+        if(checkValue(t, R.string.tiempoIncorrecta)==false){
+            return;
+        }
+/*
         //Comprobamos si esta en el rango la vel, k_PI, tiempo
         if(speed > 255 || speed < 0){
             Toast.makeText(this, R.string.velocidadIncorrecta, Toast.LENGTH_SHORT).show();
@@ -410,9 +350,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this, R.string.tiempoIncorrecta, Toast.LENGTH_SHORT).show();
             return;
         }
-
+*/
         message = "I" +passToString(speed) + passToString(k_PI) + passToString(t);
-        //message = "0000,0000";
 
         // Obtenemos la cadena de bytes a enviar
         byte[] send = message.getBytes();
@@ -425,6 +364,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // Enviamos el mensaje
         mService.write(send);
+    }
+
+    public boolean checkValue(int valor, int mensaje){
+        if(valor > 255 || valor < 0) {
+            Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();
+            return false;
+        }else{
+            return true;
+        }
     }
 
 
@@ -450,9 +398,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //mService.write();
                     //mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
                     //getSupportActionBar().setSubtitle(String.format(getString(R.string.conectado_a),mConnectedDeviceName));
-                    //getSupportActionBar().setSubtitle(Html.fromHtml("<small>" + getString(R.string.conectado_a) + " " + mConnectedDeviceName + "</small>"));
-
-                    //deviceConnected=true;
                     setEstadoConectado();
                     break;
                 // Mensaje a mostrar al usuario
@@ -469,7 +414,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     boolean esNumero = isNumeric(readMessage);
                     sb.append(readMessage);
-                    //Toast.makeText(getApplicationContext(), "bytes salida 1 " + " " + readMessage, Toast.LENGTH_SHORT).show();
+
                     if(!esNumero){
                         sb.delete(0, sb.length());
                     }
@@ -514,30 +459,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    /**
-     * Get vel deseada int.
-     *
-     * @return the int
-     */
     protected int getVelDeseada(){
         return speed;
     }
 
-    /**
-     * Get vel encoder double [ ].
-     *
-     * @return the double [ ]
-     */
     public static double[] getVelEncoder(){
         return vecValoresEjeX;
     }
 
-    /**
-     * Is numeric boolean.
-     *
-     * @param str the str
-     * @return the boolean
-     */
     public static boolean isNumeric(String str) {
         if(str == null || str.isEmpty()){
             return false;
@@ -546,13 +475,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return false;
         }
         int i = 0;
-        /*if(str.charAt(i == "-"){
-            if (str.length() > 1){
-                i++;
-            } else {
-                return false;
-            }
-        }*/
         for (i=0; i< str.length(); i++) {
             if (!Character.isDigit(str.charAt(i))){
                 return false;
@@ -561,25 +483,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
-    /**
-     * Sets pos eje x.
-     */
     public void setPosEjeX() {
         posEjeX=0;
     }
 
-    /**
-     * Gets pos eje x.
-     *
-     * @return the pos eje x
-     */
     public static int getPosEjeX() {
         return posEjeX;
     }
 
-    /**
-     * Set estado conexion.
-     */
     public static void setEstadoConexion(){
         deviceConnected=false;
     }
@@ -611,7 +522,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         "Alejandro Merino Gómez" + '\n' + '\n' +
                         getString(R.string.version) + ":" + '\n' +
                         "2016, Version 1.0" + '\n' + '\n' +
-                        getString(R.string.license) + ":" +'\n'+
+                        getString(R.string.license) + ":" + '\n' +
                         "Apache License, Version 2.0");
                 builder.create();
                 builder.show();

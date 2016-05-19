@@ -119,9 +119,6 @@ public class GraphActivity extends Activity {
         }
 
 
-        //values.add(new double[] { 1, 2, 3, 4, 5 });
-        //values.add(new double[] { 150, 150, 150, 150, 150 });
-
         int[] colors = new int[] { Color.BLUE, Color.GREEN };
         PointStyle[] styles = new PointStyle[] { PointStyle.CIRCLE,	PointStyle.DIAMOND };
         XYMultipleSeriesRenderer renderer = buildRenderer(colors, styles);
@@ -158,6 +155,7 @@ public class GraphActivity extends Activity {
         return dataset;
     }
 
+    //
     private void addXYSeries(XYMultipleSeriesDataset dataset, String[] titles,List<double[]> xValues, List<double[]> yValues, int scale) {
         int length = titles.length;
         for (int i = 0; i < length; i++) {

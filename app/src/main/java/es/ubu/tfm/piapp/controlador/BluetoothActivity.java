@@ -122,39 +122,6 @@ public class BluetoothActivity extends AppCompatActivity {
         }
     }
 
-    /*
-    private void startBluetoothService() {
-        // Inicializamos el BluetoothService para poder realizar las conexiones de bluetooth.
-        mService = new BluetoothService(this, mHandler);
-    }*/
-
-    //private String mConnectedDeviceName = null;
-
-    // Nombres de claves recibidas desde el Handler de BluetoothService
-    //public static final String DEVICE_NAME = "device_name";
-    //public static final String TOAST = "toast";
-
-    /**
-     *  Handler que recibe la información de BluetoothService
-     *//*
-    private final Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                // Nombre del dispositivo conectado
-                case MESSAGE_DEVICE_NAME:
-                    // Guardamos el nombre del dispositivo con el que estamos conectados
-                    mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
-                    Toast.makeText(getApplicationContext(), "tatata" + " " + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
-                    break;
-                // Mensaje a mostrar al usuario
-                case MESSAGE_TOAST:
-                    Toast.makeText(getApplicationContext(), getString((int) msg.getData().getLong(TOAST)), Toast.LENGTH_SHORT).show();
-                    break;
-            }
-        }
-    };*/
-
 
     @Override
     protected void onDestroy() {
