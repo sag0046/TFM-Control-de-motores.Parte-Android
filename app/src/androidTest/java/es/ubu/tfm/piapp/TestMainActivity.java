@@ -32,6 +32,9 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
+/**
+ * The type Test main activity.
+ */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class TestMainActivity extends ActivityInstrumentationTestCase2<MainActivity> {
@@ -52,12 +55,18 @@ public class TestMainActivity extends ActivityInstrumentationTestCase2<MainActiv
     private TextView lbAlgPITemp;
     private EditText AlgPITemp;
 
-    // Resultado de invocaciones
+    /**
+     * The Result.
+     */
+// Resultado de invocaciones
     Object result;
 
     //@Rule
     //public ActivityTestRule<MainActivity> mActivityTest = new ActivityTestRule<>(MainActivity.class);
 
+    /**
+     * Instantiates a new Test main activity.
+     */
     public TestMainActivity() {
         super(MainActivity.class);
     }
@@ -70,7 +79,10 @@ public class TestMainActivity extends ActivityInstrumentationTestCase2<MainActiv
 
     }
 
-    // Test validación básica botones.
+    /**
+     * Test simple click button.
+     */
+// Test validación básica botones.
     @Test
     public void testSimpleClickButton(){
         try{
@@ -98,7 +110,10 @@ public class TestMainActivity extends ActivityInstrumentationTestCase2<MainActiv
         }
     }
 
-    // Test validación básica textoslabels.
+    /**
+     * Test simple label value.
+     */
+// Test validación básica textoslabels.
     @Test
     public void testSimpleLabelValue(){
         try{
@@ -135,7 +150,10 @@ public class TestMainActivity extends ActivityInstrumentationTestCase2<MainActiv
         }
     }
 
-    // Test validación parseo variables a enviar por Bluetooth
+    /**
+     * Test pass to string.
+     */
+// Test validación parseo variables a enviar por Bluetooth
     @Test
     public void testPassToString(){
         final Method methodPassToString;
@@ -168,7 +186,10 @@ public class TestMainActivity extends ActivityInstrumentationTestCase2<MainActiv
         }
     }
 
-    // Test validación cambio estado del Bluetooth
+    /**
+     * Test set estado conectado.
+     */
+// Test validación cambio estado del Bluetooth
     @Test
     public void testSetEstadoConectado(){
         final Method methodSetEstadoConectado;
@@ -226,7 +247,10 @@ public class TestMainActivity extends ActivityInstrumentationTestCase2<MainActiv
         }
     }
 
-    // Test validación rellenar Labels datos
+    /**
+     * Test labels information.
+     */
+// Test validación rellenar Labels datos
     @Test
     public void testLabelsInformation(){
         try {
@@ -242,7 +266,10 @@ public class TestMainActivity extends ActivityInstrumentationTestCase2<MainActiv
         }
     }
 
-    // Test validación cambio estado del Bluetooth
+    /**
+     * Test check value.
+     */
+// Test validación cambio estado del Bluetooth
     @Test
     public void testCheckValue(){
         final Method methodCheckValue;

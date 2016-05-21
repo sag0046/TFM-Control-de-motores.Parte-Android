@@ -34,13 +34,22 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
+/**
+ * The type Test graph activity.
+ */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class TestGraphActivity  extends ActivityInstrumentationTestCase2<GraphActivity> {
 
-    // Resultado de invocaciones
+    /**
+     * The Result.
+     */
+// Resultado de invocaciones
     Object result;
 
+    /**
+     * Instantiates a new Test graph activity.
+     */
     public TestGraphActivity() {
         super(GraphActivity.class);
     }
@@ -51,7 +60,10 @@ public class TestGraphActivity  extends ActivityInstrumentationTestCase2<GraphAc
         getActivity();
     }
 
-    // Test validación add series
+    /**
+     * Test add xy series.
+     */
+// Test validación add series
     @Test
         public void testAddXYSeries(){
         final Method methodCheckValue;

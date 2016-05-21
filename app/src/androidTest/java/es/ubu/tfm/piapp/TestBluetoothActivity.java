@@ -13,11 +13,17 @@ import android.util.Log;
 
 import java.lang.reflect.Method;
 
+/**
+ * The type Test bluetooth activity.
+ */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class TestBluetoothActivity extends ActivityInstrumentationTestCase2<BluetoothActivity> {
     private BluetoothActivity btActivity;
 
+    /**
+     * Instantiates a new Test bluetooth activity.
+     */
     public TestBluetoothActivity() {
         super(BluetoothActivity.class);
     }
@@ -28,6 +34,9 @@ public class TestBluetoothActivity extends ActivityInstrumentationTestCase2<Blue
         btActivity = getActivity();
     }
 
+    /**
+     * Test do discovery.
+     */
     @Test
     public void testDoDiscovery(){
         final Method methodDoDiscovery;

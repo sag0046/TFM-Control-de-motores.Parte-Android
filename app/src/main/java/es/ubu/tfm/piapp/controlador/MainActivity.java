@@ -27,6 +27,9 @@ import es.ubu.tfm.piapp.FontManager;
 import es.ubu.tfm.piapp.R;
 import es.ubu.tfm.piapp.modelo.BluetoothService;
 
+/**
+ * The type Main activity.
+ */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     // Debugging
@@ -38,29 +41,77 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int REQUEST_ENABLE_BT = 2;
     private static final int REQUEST_POINT = 3;
 
-    // Tipos de mensajes enviados desde el Handler de BluetoothService
+    /**
+     * The constant MESSAGE_STATE_CHANGE.
+     */
+// Tipos de mensajes enviados desde el Handler de BluetoothService
     public static final int MESSAGE_STATE_CHANGE = 1;
+    /**
+     * The constant MESSAGE_READ.
+     */
     public static final int MESSAGE_READ = 2;
+    /**
+     * The constant MESSAGE_DEVICE_CONNECTED.
+     */
     public static final int MESSAGE_DEVICE_CONNECTED = 3;
+    /**
+     * The constant MESSAGE_TOAST.
+     */
     public static final int MESSAGE_TOAST = 4;
 
-    //Códigos para ejecutar y parar
+    /**
+     * The constant MOVE_STOP.
+     */
+//Códigos para ejecutar y parar
     public static final int MOVE_STOP = 1;
+    /**
+     * The constant MOVE_PLAY.
+     */
     public static final int MOVE_PLAY = 2;
 
-    // Nombres de claves recibidas desde el Handler de BluetoothService
+    /**
+     * The constant DEVICE_NAME.
+     */
+// Nombres de claves recibidas desde el Handler de BluetoothService
     public static final String DEVICE_NAME = "device_name";
+    /**
+     * The constant TOAST.
+     */
     public static final String TOAST = "toast";
 
-    // Variables algoritmo
+    /**
+     * The constant message.
+     */
+// Variables algoritmo
     public static String message; //PIDE INICIALIZAR A NULL
     private StringBuilder sb = new StringBuilder();
+    /**
+     * The constant speed.
+     */
     public static int speed;
+    /**
+     * The constant k_P.
+     */
     public static int k_P; //cte k para algoritmo proporcional
+    /**
+     * The constant k_PI.
+     */
     public static int k_PI; // cte k para algoritmo PI
+    /**
+     * The constant t.
+     */
     public static int t;
+    /**
+     * The constant vecValoresEjeX.
+     */
     public static double [] vecValoresEjeX = new double[2000];
+    /**
+     * The constant posEjeX.
+     */
     public static int posEjeX=0;
+    /**
+     * The constant deviceConnected.
+     */
     public static boolean deviceConnected=false;
 
     //Servicio BT
@@ -117,7 +168,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    //Check para elegir un algoritmo
+    /**
+     * Elegir algoritmo.
+     *
+     * @param v the v
+     */
+//Check para elegir un algoritmo
     public void elegirAlgoritmo(View v) {
         switch(v.getId()) {
             case R.id.rdIntegral:
@@ -146,7 +202,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mService = new BluetoothService(this, mHandler);
     }
 
-    //Lanza la conexion Bluetooth
+    /**
+     * Lanzar bt.
+     */
+//Lanza la conexion Bluetooth
     public void lanzarBT() {
         if (!mBluetoothAdapter.isEnabled()) {
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -159,6 +218,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
+    /**
+     * Lanzar gr.
+     */
     public void lanzarGR() {
         Intent j = new Intent(this, GraphActivity.class );
         if(getPosEjeX()!=0) {
@@ -366,6 +428,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mService.write(send);
     }
 
+    /**
+     * Check value boolean.
+     *
+     * @param valor   the valor
+     * @param mensaje the mensaje
+     * @return the boolean
+     */
     public boolean checkValue(int valor, int mensaje){
         if(valor > 255 || valor < 0) {
             Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();
@@ -459,14 +528,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * Get vel deseada int.
+     *
+     * @return the int
+     */
     protected int getVelDeseada(){
         return speed;
     }
 
+    /**
+     * Get vel encoder double [ ].
+     *
+     * @return the double [ ]
+     */
     public static double[] getVelEncoder(){
         return vecValoresEjeX;
     }
 
+    /**
+     * Is numeric boolean.
+     *
+     * @param str the str
+     * @return the boolean
+     */
     public static boolean isNumeric(String str) {
         if(str == null || str.isEmpty()){
             return false;
@@ -483,14 +568,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
+    /**
+     * Sets pos eje x.
+     */
     public void setPosEjeX() {
         posEjeX=0;
     }
 
+    /**
+     * Gets pos eje x.
+     *
+     * @return the pos eje x
+     */
     public static int getPosEjeX() {
         return posEjeX;
     }
 
+    /**
+     * Set estado conexion.
+     */
     public static void setEstadoConexion(){
         deviceConnected=false;
     }
