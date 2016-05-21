@@ -1,4 +1,4 @@
-# TFM-Control-de-motores.Parte-Android
+# TFM Control de motores.Parte Android
 Codigo Android : desarrollo de la aplicación
 
 PIAPP permite el control remoto de un contenedor motor DC via Bluetooth.
