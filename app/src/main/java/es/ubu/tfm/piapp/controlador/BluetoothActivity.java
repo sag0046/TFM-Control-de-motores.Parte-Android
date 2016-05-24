@@ -35,43 +35,73 @@ import es.ubu.tfm.piapp.R;
 
 
 /**
- * The type Bluetooth activity.
+ * Actividad de Bluetooth.
+ * @author    Sandra Ajates González
+ * @version   1.0
  */
 public class BluetoothActivity extends AppCompatActivity {
-    // Debugging
-    private static final String TAG = "DeviceListActivity";//modificar
+    /**
+     * Constante con listado de dispositivos.
+     */
+    private static final String TAG = "DeviceListActivity";
+    /**
+     * Constante con booleano de acceso.
+     */
     private static final boolean D = true;
 
     /**
-     * The constant EXTRA_DEVICE_ADDRESS.
+     * Constante con el nombre de la dirección.
      */
-// Retorno extra del Intent
     public static String EXTRA_DEVICE_ADDRESS = "device_address";
+    /**
+     * Definición adaptador Bluetooth.
+     */
+    private BluetoothAdapter mBtAdapter;
+    /**
+     * Definición dispositivos emparejados.
+     */
+    private ArrayAdapter<String> mPairedDevicesArrayAdapter;
+    /**
+     * Definición dispositivos nuevos.
+     */
+    private ArrayAdapter<String> mNewDevicesArrayAdapter;
 
-    private BluetoothAdapter mBtAdapter;//adaptador BT
-    private ArrayAdapter<String> mPairedDevicesArrayAdapter;//Array disp emparejados
-    private ArrayAdapter<String> mNewDevicesArrayAdapter; //Array disp nuevos
-
+    /**
+     * Método onCreate.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Establecemos la ventana y el layout
-        //requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        /**
+         * Establece la ventana y el layout.
+         */
         setContentView(R.layout.bt_activity);
+        /**
+         * Establece la orientación de la pantalla.
+         */
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        // Ponemos el resultado CANCELED en caso de que el usuario vuelva hacia atras
+        /**
+         * Pone el resultado CANCELED en caso de que el usuario vuelva hacia atras.
+         */
         setResult(Activity.RESULT_CANCELED);
+        /**
+         * Establece propiedades del contenedor.
+         */
         Typeface iconFont = FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME);
         FontManager.markAsIconContainer(findViewById(R.id.icons_container), iconFont);
         FontManager.markAsIconContainer(findViewById(R.id.btnActivar), iconFont);
 
-        //getSupportActionBar().setSubtitle(getString(R.string.no_conectado));
+        /**
+         * Pînta los botones del bar de la parte superior.
+         */
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(ContextCompat.getDrawable(this, R.drawable.ic_logo_ubu));
         //getSupportActionBar().setHomeButtonEnabled(true);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // Inicializamos el boton qe permite descubrir nuevos dispositivos
+        /**
+         * Inicializa el boton qe permite descubrir nuevos dispositivos.
+         */
         Button scanButton = (Button) findViewById(R.id.btnActivar);
         scanButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -80,37 +110,53 @@ public class BluetoothActivity extends AppCompatActivity {
             }
         });
 
-        // Inicializamos los arrays de los dispositivos
+        /**
+         * Inicializa los arrays de los dispositivos.
+         */
         mPairedDevicesArrayAdapter = new ArrayAdapter<String>(this, R.layout.device_name);
         mNewDevicesArrayAdapter = new ArrayAdapter<String>(this, R.layout.device_name);
 
-        // Buscamos y establecemos el listener para los item del ListView
-        // para los DISPOSITIVOS EMPAREJADOS
+        /**
+         * Busca y establece el listener para los item del ListView
+         * para los DISPOSITIVOS EMPAREJADOS
+         */
         ListView pairedListView = (ListView) findViewById(R.id.dispositivosEmparejados);
         pairedListView.setAdapter(mPairedDevicesArrayAdapter);
         pairedListView.setOnItemClickListener(mDeviceClickListener);
 
-        // Buscamos y establecemos el listener para los item del ListView
-        // para los NUEVOS DISPOSITIVOS ENCONTRADOS
+        /**
+         * Busca y establece el listener para los item del ListView
+         * para los NUEVOS DISPOSITIVOS ENCONTRADOS.
+         */
         ListView newDevicesListView = (ListView) findViewById(R.id.nuevosDispositivos);
         newDevicesListView.setAdapter(mNewDevicesArrayAdapter);
         newDevicesListView.setOnItemClickListener(mDeviceClickListener);
 
-        // Registra el broadcasts cuando un dispositivo nuevo es encontrado
+        /**
+         * Registra el broadcasts cuando un dispositivo nuevo es encontrado.
+         */
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         this.registerReceiver(mReceiver, filter);
 
-        // Registra el broadcasts cuando ha finalizado la busqueda
+        /**
+         * Registra el broadcasts cuando ha finalizado la busqueda.
+         */
         filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
         this.registerReceiver(mReceiver, filter);
 
-        // Obtenemos el adaptador Bluetooth
+        /**
+         * Obtiene el adaptador Bluetooth.
+         */
         mBtAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        // Obtenemos los dispositivos emparejados
+        /**
+         * Obtiene los dispositivos emparejados.
+         */
         Set<BluetoothDevice> pairedDevices = mBtAdapter.getBondedDevices();
 
-        // Si hay dispositivos emparejados se añade cada uno de ellos al arrayAdapter
+        /**
+         * Añade los dispositivos emparejados al arrayAdapter.
+         */
         if (pairedDevices.size() > 0) {
             findViewById(R.id.lbldispositivosEmparejados).setVisibility(View.VISIBLE);
             for (BluetoothDevice device : pairedDevices) {
@@ -122,83 +168,122 @@ public class BluetoothActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Método onDestroy.
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
-        // Nos aseguramos de que no estamos haciendo mas busquedas
+        /**
+         * Valida de que no realice más búsquedas.
+         */
         if (mBtAdapter != null) {
             mBtAdapter.cancelDiscovery();
         }
 
-        // Desregistramos el broadcast listeners
+        /**
+         * Elimina el registro del broadcast listeners.
+         */
         this.unregisterReceiver(mReceiver);
     }
 
-    //Empieza el descubrimiento de dispositivos con el adaptador Bluetooth.
+    /**
+     * Hace visibles los dispositivos con el adaptador Bluetooth.
+     */
     private void doDiscovery() {
         if (D) Log.d(TAG, "doDiscovery()");
 
-        // Cambiamos el titulo a escaneando
+        /**
+         * Actualiza el título a escaneando.
+         */
         setProgressBarIndeterminateVisibility(true);
-       // setTitle(R.string.scanning);
         getSupportActionBar().setSubtitle(getString(R.string.scanning));
 
-        // Habilitamos la visibilidad del sub-titulo de nuevos dispositivos
+        /**
+         * Habilita la visibilidad del sub-titulo de nuevos dispositivos.
+         */
         findViewById(R.id.lblnuevosDispositivos).setVisibility(View.VISIBLE);
 
-        // Si estaba ya buscando, paramos esto
+        /**
+         * En el caso de que este realizando la búsqueda, se para.
+         */
         if (mBtAdapter.isDiscovering()) {
             mBtAdapter.cancelDiscovery();
         }
 
-        // Petición de descubrimiento de Bluetooth Adapter, es decir, buscamos.
+        /**
+         * Visibilidad del Bluetooth Adapter.
+         */
         mBtAdapter.startDiscovery();
     }
 
 
-    //onClickListener para todos los disp. en el listView
+    /**
+     * onClickListener  para todos los disp. en el listView.
+     */
     private OnItemClickListener mDeviceClickListener = new OnItemClickListener() {
         public void onItemClick(AdapterView<?> av, View v, int arg2, long arg3) {
-            // Cancelamos el descubrimiento porque es costosa y estamos a punto de conectar
+            /**
+             * Cancela el descubrimiento de dispositivos ya que se va a producir el enlace a continuación.
+             */
             mBtAdapter.cancelDiscovery();
 
-            // Obtenemos la dirección MAC del dispositivo que son los ultimos 17 caracteres de la Vista
+            /**
+             * Obtiene la dirección MAC del dispositivo que son los ultimos 17 caracteres de la Vista.
+             */
             String info = ((TextView) v).getText().toString();
             String address = info.substring(info.length() - 17);
 
-            // Creamos el Intent resultante y añadimos la dirección MAC
+            /**
+             * Crea el Intent resultante y añade la dirección MAC.
+             */
             Intent intent = new Intent();
             intent.putExtra(EXTRA_DEVICE_ADDRESS, address);
 
-            // Ponemos el resultado a OK y finalizamos la Activity
+            /**
+             * Pone el resultado a OK y finaliza la Activity.
+             */
             setResult(Activity.RESULT_OK, intent);
             finish();
         }
     };
 
-
+    /**
+     * Recibe el broadcast de dispositivos.
+     */
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            // Obtenemos la acción
+            /**
+             * Obtiene la acción.
+             */
             String action = intent.getAction();
 
-            // Cuando se descubre un dispositivo
+            /**
+             * Realiza las tareas asociadas cuando detecta un dispositivo.
+             */
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                // Obtenemos el objeto BluetoothDevice del Intent
+                /**
+                 * Obtiene el objeto BluetoothDevice del Intent.
+                 */
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                // Si ya esta emparejado, evitarlo, porque ha sido ya publicado
+                /**
+                 * Si ya esta emparejado, evitarlo, porque ha sido ya publicado.
+                 */
                 if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
                     mNewDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
                 }
 
-                // Cuando la busqueda finaliza cambiamos el titulo
+                /**
+                 * Cuando la busqueda finaliza cambia el título.
+                 */
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 setProgressBarIndeterminateVisibility(false);
                 setTitle(R.string.seleccionar_dispositivo);
-                // Comprobamos si habia nuevos dispositivos
+                /**
+                 * Comprueba si hay nuevos dispositivos.
+                 */
                 if (mNewDevicesArrayAdapter.getCount() == 0) {
                     String noDevices = getResources().getText(R.string.no_encontrado).toString();
                     mNewDevicesArrayAdapter.add(noDevices);
@@ -207,20 +292,35 @@ public class BluetoothActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * Método para hacer visible el menú.
+     * @param menu el menú a hacer visible.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        /**
+         * Hace visible el menú correspondiente.
+         */
         getMenuInflater().inflate(R.menu.bt_activity_bar, menu);
         return true;
     }
 
+    /**
+     * Método para interactuar cuando se selecciona un item del menú.
+     * @param item botón seleccionado.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            /**
+             * Si el botón pulsado es la flecha, volverá al menú principal.
+             */
             case R.id.menu_atras:
-                // app icon in action bar clicked; goto parent activity.
                 this.finish();
                 return true;
+            /**
+             * Si el botón pulsado es el caracter i, mostrará la inforamción de la aplicación.
+             */
             case R.id.menu_info:
                 // Mostramos dialogo con la información de la aplicación
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);

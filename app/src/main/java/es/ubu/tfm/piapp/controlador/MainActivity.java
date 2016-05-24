@@ -28,81 +28,92 @@ import es.ubu.tfm.piapp.R;
 import es.ubu.tfm.piapp.modelo.BluetoothService;
 
 /**
- * The type Main activity.
+ * Actividad principal, desde la que se podra controlar el motor.
+ * @author    Sandra Ajates González
+ * @version   1.0
+ * @see AppCompatActivity
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    // Debugging
+    /**
+     * Define nombre aplicación.
+     */
     private static final String TAG = "PIapp";
     private static final boolean D = true;
 
-    // Codigos de solicitud de Intent
+    /**
+     * Códigos de solicitud de Intent.
+     */
     private static final int REQUEST_CONNECT_DEVICE = 1;
     private static final int REQUEST_ENABLE_BT = 2;
     private static final int REQUEST_POINT = 3;
 
     /**
-     * The constant MESSAGE_STATE_CHANGE.
+     * Mensajes recibidos por el BluetoothService.
      */
-// Tipos de mensajes enviados desde el Handler de BluetoothService
+
+    /**
+     * Constante del mensaje estado modificado.
+     */
     public static final int MESSAGE_STATE_CHANGE = 1;
     /**
-     * The constant MESSAGE_READ.
+     * Constante del mensaje leído.
      */
     public static final int MESSAGE_READ = 2;
     /**
-     * The constant MESSAGE_DEVICE_CONNECTED.
+     * Constante del mensaje del dispositivo conectado.
      */
     public static final int MESSAGE_DEVICE_CONNECTED = 3;
     /**
-     * The constant MESSAGE_TOAST.
+     * Constante del mensaje Toast.
      */
     public static final int MESSAGE_TOAST = 4;
 
     /**
-     * The constant MOVE_STOP.
+     * Constante con el movimiento de parada.
      */
-//Códigos para ejecutar y parar
     public static final int MOVE_STOP = 1;
     /**
-     * The constant MOVE_PLAY.
+     * Constante con el movimiento de play.
      */
     public static final int MOVE_PLAY = 2;
 
     /**
-     * The constant DEVICE_NAME.
+     * Constante con el nombre del dispositivo Bluetooth.
      */
-// Nombres de claves recibidas desde el Handler de BluetoothService
     public static final String DEVICE_NAME = "device_name";
+
     /**
-     * The constant TOAST.
+     * Constante con el toast.
      */
     public static final String TOAST = "toast";
 
     /**
-     * The constant message.
+     * Constante con el mensaje recibido.
      */
-// Variables algoritmo
     public static String message; //PIDE INICIALIZAR A NULL
+    /**
+     * Instanciación del StringBuilder.
+     */
     private StringBuilder sb = new StringBuilder();
     /**
-     * The constant speed.
+     * Constante con la velocidad insertada por el usuario.
      */
     public static int speed;
     /**
-     * The constant k_P.
+     * Constante k_P usada en el algoritmo proporcional.
      */
     public static int k_P; //cte k para algoritmo proporcional
     /**
-     * The constant k_PI.
+     * Constante k_PI usada en el algoritmo integral.
      */
     public static int k_PI; // cte k para algoritmo PI
     /**
-     * The constant t.
+     * Constante tiempo.
      */
     public static int t;
     /**
-     * The constant vecValoresEjeX.
+     * Vector que contendrá los valores del EjeX.
      */
     public static double [] vecValoresEjeX = new double[2000];
     /**
@@ -110,20 +121,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     public static int posEjeX=0;
     /**
-     * The constant deviceConnected.
+     * Constante con el estado del dispositivo conectado.
      */
     public static boolean deviceConnected=false;
 
-    //Servicio BT
+    /**
+     * Definición del objeto BluetoothService.
+     */
     private BluetoothService mService = null;
-    //Adapatdor BT
-    private BluetoothAdapter mBluetoothAdapter = null;
-    //nombre dispositivo conectado
-    private String mConnectedDeviceName = null;
 
+    /**
+     * Definición del objeto BluetoothAdapter.
+     */
+    private BluetoothAdapter mBluetoothAdapter = null;
+    /**
+     * Definición del dispositivo conectado.
+     */
+    private String mConnectedDeviceName = null;
+    /**
+     * Definición del RadioGroup.
+     */
     private RadioGroup radioGroupMio;
+    /**
+     * Definición del RadioButton.
+     */
     private RadioButton radioButtonMio;
 
+    /**
+     * Definición onCreate.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,10 +158,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Typeface iconFont = FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME);
         FontManager.markAsIconContainer(findViewById(R.id.icons_container), iconFont);
 
-        // Obtenemos el adaptador Bluetooth
+        /**
+        * Obtiene el adaptador Bluetooth.
+        */
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        // Si el Bluetooth no está activo, requiere su activación.
-        // start() sera llamado en onActivityResult
+        /**
+         * Si el Bluetooth no está activo, requiere su activación.
+         */
         if (!mBluetoothAdapter.isEnabled()) {
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
@@ -144,24 +173,54 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (mService == null) startBluetoothService();
         }
 
+        /**
+         * Instanciación del botón play.
+         */
         Button btnPlay = (Button)findViewById(R.id.play);
+        /**
+         * Instanciación del botón stop.
+         */
         Button btnStop = (Button)findViewById(R.id.stop);
 
+
+        /**
+         * Creación del listerner del botón play.
+         */
         btnPlay.setOnClickListener(this);
+        /**
+         * Creación del listerner del botón stop.
+         */
         btnStop.setOnClickListener(this);
 
+        /**
+         * Establece el nombre del subtítulo.
+         */
         getSupportActionBar().setSubtitle(getString(R.string.no_conectado));
+        /**
+         * Establece el icono del Home.
+         */
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        /**
+         * Establece el icono del UBU.
+         */
         getSupportActionBar().setIcon(ContextCompat.getDrawable(this,R.drawable.ic_logo_ubu));
     }
 
-
+    /**
+     * Creación del onClick.
+     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            /**
+             * Acción al pulsar el botón play.
+             */
             case (R.id.play):
                 move(MOVE_PLAY);
                 break;
+            /**
+             * Acción al pulsar el botón stop.
+             */
             case (R.id.stop):
                 move(MOVE_STOP);
                 break;
@@ -171,11 +230,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * Elegir algoritmo.
      *
-     * @param v the v
+     * @param v view seleccionado
      */
-//Check para elegir un algoritmo
     public void elegirAlgoritmo(View v) {
         switch(v.getId()) {
+            /**
+             * Acción al elegir la opción del algoritmo integral.
+             */
             case R.id.rdIntegral:
                 findViewById(R.id.txtVelocidad).setEnabled(true);
                 findViewById(R.id.txtConstantePI).setEnabled(true);
@@ -184,7 +245,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 findViewById(R.id.txtConstanteP).setEnabled(false);
                 ((EditText)findViewById(R.id.txtConstanteP)).setText("");
                 break;
-
+            /**
+             * Acción al elegir la opción del algoritmo integral.
+             */
             case R.id.rdProporcional:
                 findViewById(R.id.txtVelocidad).setEnabled(true);
                 findViewById(R.id.txtConstanteP).setEnabled(true);
@@ -197,16 +260,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
+
+    /**
+     * Inicio del BluetoothService.
+     */
     private void startBluetoothService() {
         // Inicializamos el BluetoothService para poder realizar las conexiones de bluetooth.
         mService = new BluetoothService(this, mHandler);
     }
 
     /**
-     * Lanzar bt.
+     * Lanza la conexión Bluetooth.
      */
-//Lanza la conexion Bluetooth
     public void lanzarBT() {
+        /**
+         * Si la conexión Bluetooth esta deshabilitada pide su inicio.
+         */
         if (!mBluetoothAdapter.isEnabled()) {
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
@@ -219,9 +288,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     /**
-     * Lanzar gr.
+     * Lanza la instancia de GraphActivity para pintar el gráfico.
      */
     public void lanzarGR() {
+        /**
+         * Intent del GraphActivity.
+         */
         Intent j = new Intent(this, GraphActivity.class );
         if(getPosEjeX()!=0) {
             startActivity(j);
@@ -230,18 +302,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * Pausado de la sincronización.
+     */
     @Override
     public synchronized void onPause() {
         super.onPause();
         if(D) Log.e(TAG, "- ON PAUSE -");
     }
 
+    /**
+     * Parada de la sincronización.
+     */
     @Override
     public void onStop() {
         super.onStop();
         if(D) Log.e(TAG, "-- ON STOP --");
     }
 
+    /**
+     * Método onDestroy.
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -250,10 +331,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(D) Log.e(TAG, "--- ON DESTROY ---");
     }
 
+    /**
+     * Método que establece el moviento a realizar.
+     * @param movement movimiento seleccionado.
+     */
     private void move (int movement){
+        /**
+         * Obtiene el radioGroup seleccionado.
+         */
         radioGroupMio = (RadioGroup) findViewById(R.id.GrbGrupo1);
 
-        // get selected radio button from radioGroup
+        /**
+         * Valida que el dispositivo Bluetooth este conectado.
+         */
         int selectedId = radioGroupMio.getCheckedRadioButtonId();
 
         //deviceConnected=true;
@@ -262,9 +352,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this,R.string.bluetoothNoConectado, Toast.LENGTH_SHORT).show();
         }else {
             switch (movement) {
+                /**
+                 * Si el moviento es el play se llama a selección del algoritmo.
+                 */
                 case (MOVE_PLAY):
                     seleccionAlgoritmo(selectedId);
                     break;
+                /**
+                 * Si el moviento es el stop se llama al método que envía el movimiento stop.
+                 */
                 case (MOVE_STOP):
                     stopMotor();
                     break;
@@ -272,14 +368,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * Método para enviar el mensaje de parada del motor.
+     */
     private void stopMotor() {
         message = "S";
-        //message = "0000,0000";
-        // Obtenemos ldeviceConnecteda cadena de bytes a enviar
+        /**
+         * Almacena la cadena de Bytes a mandar.
+         */
         byte[] send = message.getBytes();
+        /**
+         * Envía el mensaje por Bluetooth.
+         */
         mService.write(send);
     }
 
+    /**
+     * Método para seleccionar el algoritmo a enviar.
+     * @param algoritmo valor seleccionado
+     */
     private void seleccionAlgoritmo(int algoritmo) {
         switch (algoritmo){
             case R.id.rdProporcional:
@@ -295,9 +402,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * Método para establecer los parámetros asociados al algoritmo proporcional.
+     */
     private void algoritmoProporcional() {
-        //Recogemos los valores de Velocidad, k
+        /**
+         * Recoge la velocidad del algoritmo proporcional.
+         */
         EditText speedTxt = (EditText)findViewById(R.id.txtVelocidad);
+        /**
+         * Método Recoge el valor de la constante k del algoritmo proporcional.
+         */
         EditText k_PTxt = (EditText)findViewById(R.id.txtConstanteP);
 
         //capturamos
@@ -315,17 +430,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this,R.string.no_kp, Toast.LENGTH_SHORT).show();
             return;
         }
-
- /*       //Comprobamos si esta en el rango la vel, k_P
-        if(speed > 255 || speed < 0){
-            Toast.makeText(this, R.string.velocidadIncorrecta, Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if(k_P > 255 || k_P < 0){
-            Toast.makeText(this, R.string.kPincorrecta, Toast.LENGTH_SHORT).show();
-            return;
-        }
- */
 
         //Comprobamos si esta en el rango la velocidad
         if(checkValue(speed, R.string.velocidadIncorrecta)==false){
@@ -351,10 +455,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mService.write(send);
     }
 
+    /**
+     * Método para establecer los parámetros asociados al algoritmo integral.
+     */
     private void algoritmoIntegral() {
-        //Recogemos los valores de Velocidad, k, tiempo
+        /**
+         * Recoge la velocidad del algoritmo integral.
+         */
         EditText speedTxt = (EditText)findViewById(R.id.txtVelocidad);
+        /**
+         * Recoge la constante k del algoritmo integral.
+         */
         EditText k_PITxt = (EditText)findViewById(R.id.txtConstantePI);
+        /**
+         * Recoge la constante tiempo del algoritmo integral.
+         */
         EditText tTxt = (EditText)findViewById(R.id.txtTiempo);
 
         //capturamos
@@ -394,25 +509,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(checkValue(t, R.string.tiempoIncorrecta)==false){
             return;
         }
-/*
-        //Comprobamos si esta en el rango la vel, k_PI, tiempo
-        if(speed > 255 || speed < 0){
-            Toast.makeText(this, R.string.velocidadIncorrecta, Toast.LENGTH_SHORT).show();
-            return;
-        }
 
-        if(k_PI > 255 || k_PI < 0){
-            Toast.makeText(this, R.string.kPIincorrecta, Toast.LENGTH_SHORT).show();
-            return;
-        }
-        //para hacer los dos tipos de algoritmos habrá que separar en 2 métodos, para el que tiene "t" hay que añadir esto,
-// para el otro pues esta validación no tiene sentido.
-
-        if(t > 255 || t < 0){
-            Toast.makeText(this, R.string.tiempoIncorrecta, Toast.LENGTH_SHORT).show();
-            return;
-        }
-*/
         message = "I" +passToString(speed) + passToString(k_PI) + passToString(t);
 
         // Obtenemos la cadena de bytes a enviar
@@ -429,11 +526,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Check value boolean.
+     * Método que valida que el valor recibido esté dentro del rango establecido.
      *
-     * @param valor   the valor
-     * @param mensaje the mensaje
-     * @return the boolean
+     * @param valor entero a validar.
+     * @param mensaje indicador asociado al texto a mostrar en caso de no estar comprendido en el rango.
+     * @return retorna si el valor es correcto o no.
      */
     public boolean checkValue(int valor, int mensaje){
         if(valor > 255 || valor < 0) {
@@ -445,7 +542,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    //Esta dependerá si necesitamos pasarlar a ese formato o queremos enviar los datos en formato hexadecimal.
+    /**
+     * Método que parsea el valor a enviar por Bluetooth.
+     *
+     * @param value entero a parsear.
+     * @return retorna el valor parseado.
+     */
     private String passToString(int value){
         String valueString = "";
 
@@ -456,7 +558,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return valueString;
     }
 
-    //recibe info de BluetoothService
+    /**
+     * Método que recibe información de BluetoothService.
+     */
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -502,12 +606,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     };
 
+    /**
+     * Método que establece el estado conectado en el subtítulo.
+     */
     private final void setEstadoConectado() {
         getSupportActionBar().setSubtitle(Html.fromHtml("<small>" + getString(R.string.conectado_a) + mConnectedDeviceName + "</small>"));
         deviceConnected=true;
     }
 
-
+    /**
+     * Método onActivityResult.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Comprueba que solicitamos que estamos respondiendo a
@@ -529,28 +638,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Get vel deseada int.
+     * Retorna la velocidad insertada por el usuario.
      *
-     * @return the int
+     * @return velocidad insertada por el usuario
      */
     protected int getVelDeseada(){
         return speed;
     }
 
     /**
-     * Get vel encoder double [ ].
+     * Obtiene los valores recibidos por el Bluetooth.
      *
-     * @return the double [ ]
+     * @return vector con los datos recibidos
      */
     public static double[] getVelEncoder(){
         return vecValoresEjeX;
     }
 
     /**
-     * Is numeric boolean.
+     * Valida si los caracteres recibidos son enteros.
      *
-     * @param str the str
-     * @return the boolean
+     * @param str caracteres a validar
+     * @return si son enteros o no
      */
     public static boolean isNumeric(String str) {
         if(str == null || str.isEmpty()){
@@ -569,28 +678,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Sets pos eje x.
+     * Establecela posición 0 para el eje X.
      */
     public void setPosEjeX() {
         posEjeX=0;
     }
 
     /**
-     * Gets pos eje x.
+     * Obtiene la última posición de datos recibidos.
      *
-     * @return the pos eje x
+     * @return la última posición rellena del vector de datos
      */
     public static int getPosEjeX() {
         return posEjeX;
     }
 
     /**
-     * Set estado conexion.
+     * Establece el estado conexión a NO conectado.
      */
     public static void setEstadoConexion(){
         deviceConnected=false;
     }
 
+    /**
+     * Método onCreateOptionsMenu.
+     *
+     * @param menu pinta el menú en la parte superior de la aplicación.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -598,6 +712,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
+    /**
+     * Método onOptionsItemSelected.
+     * Establece la acción a realizar en función del item seleccionado.
+     *
+     * @param item seleccionado.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

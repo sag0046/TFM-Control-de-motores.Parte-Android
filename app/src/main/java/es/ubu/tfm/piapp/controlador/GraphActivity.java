@@ -25,22 +25,55 @@ import android.os.Handler;
 import es.ubu.tfm.piapp.R;
 
 /**
- * The type Graph activity.
+ * Actividad de Gráficos, pintará los datos recibidos por el dispositivo Bluetooth.
+ * @author    Sandra Ajates González
+ * @version   1.0
  */
 public class GraphActivity extends Activity {
 
+    /**
+     * DEfinición del GraphLayout.
+     */
     private RelativeLayout graphLayout;
+
+    /**
+     * Definición tipo gráfico.
+     */
     private LineChart mChart;
 
+    /**
+     * Instancia objeto de la clase principal.
+     */
     private MainActivity mainPrinc = new MainActivity();
 
+    /**
+     * Establece el dataset para múltiples líneas en el gráfico.
+     */
     private XYMultipleSeriesDataset dataset;
+
+    /**
+     * Definición de la vista del gráfico.
+     */
     private GraphicalView graphicalView;
+
+    /**
+     * Obtiene de la clase principal el número de datos para la gráfica.
+     */
     private double addX = mainPrinc.getPosEjeX();//30;
-    //private double addX = mainPrinc.getPosEjeX();//30;
+    /**
+     * Definición parámetros necesarios.
+     */
     private double plus = 6;
     private double minus = 13;
+
+    /**
+     * Obtención de un handler.
+     */
     private Handler handler = new Handler();
+
+    /**
+     * Instancia el método de ejecución.
+     */
 
     private Runnable updateRunnable = new Runnable() {
 
@@ -56,7 +89,9 @@ public class GraphActivity extends Activity {
         }
     };
 
-
+    /**
+     * Método onCreate.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -64,37 +99,22 @@ public class GraphActivity extends Activity {
         setContentView(R.layout.gr_activity);
         graphLayout = (RelativeLayout) findViewById(R.id.graphLayout);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-
+        /**
+         * Establece los títulos de las dos líneas de datos.
+         */
         String[] titles = new String[] { "Velocidad Real", "Velocidad Deseada" };
         List<double[]> x = new ArrayList<double[]>();
 
 
-        /*for (int i = 0; i < titles.length; i++) {
-            x.add(new double[] { 1, 2, 3, 4, 5 });
-        }
-        List<double[]> values = new ArrayList<double[]>();
-        values.add(new double[] { 1, 2, 3, 4, 5 });
-        values.add(new double[] { 150, 150, 150, 150, 150 });
-        */
-
+        /**
+         * Obtiene los datos recibidos por Bluetooth.
+         */
         double [] vecValoresEjeX = mainPrinc.getVelEncoder();
         int valor = mainPrinc.getVelDeseada();
         int logGraph = mainPrinc.getPosEjeX();
         double [] vecValoresEjeY = new double[logGraph];
-
-
-        /*for(int i=0; i<logGraph;i++){
-            //Toast.makeText(getApplicationContext(), "Valor " + valor, Toast.LENGTH_SHORT).show();
-            Toast.makeText(getApplicationContext(), "EjeX " + vecValoresEjeX[i], Toast.LENGTH_SHORT).show();
-        }*/
-
-        //Toast.makeText(getApplicationContext(), "Tamaño " + logGraph, Toast.LENGTH_SHORT).show();
-
-
-
         double [] vec = new double[logGraph];
 
-        // int logGraph = vecValoresEjeX.length; // modificado 23/4/16
 
         for (int i = 0; i < titles.length; i++) {
             for (int j = 0; j < logGraph; j++) {
@@ -107,10 +127,11 @@ public class GraphActivity extends Activity {
 
         //Toast.makeText(getApplicationContext(), "salida" + " " + titles.length, Toast.LENGTH_SHORT).show();
 
+        /**
+         * Establece en cada punto del gráfico la velocidad deseada, siempre constante.
+         */
         for (int i=0; i < logGraph; i++) {
-            //vecValoresEjeX[i] = 13*Math.random();
             vecValoresEjeY[i] = valor;
-            //Toast.makeText(getApplicationContext(), "bytes " + vecValoresEjeX[i], Toast.LENGTH_SHORT).show();
         }
 
         for (int i=0; i < titles.length; i++) {
@@ -118,9 +139,17 @@ public class GraphActivity extends Activity {
             values.add(vecValoresEjeY);
         }
 
-
+        /**
+         * Define los colores de las líneas de los gráficos.
+         */
         int[] colors = new int[] { Color.BLUE, Color.GREEN };
+        /**
+         * Define los puntos de definición de los datos imprimidos.
+         */
         PointStyle[] styles = new PointStyle[] { PointStyle.CIRCLE,	PointStyle.DIAMOND };
+        /**
+         * REnderizado de los datos.
+         */
         XYMultipleSeriesRenderer renderer = buildRenderer(colors, styles);
         int length = renderer.getSeriesRendererCount();
         for (int i = 0; i < length; i++) {
@@ -128,8 +157,14 @@ public class GraphActivity extends Activity {
                     .setFillPoints(true);
         }
 
+        /**
+         * Definición de la leyenda del gráfico.
+         */
         setChartSettings(renderer, "Velocidad", "Tiempo (ms)",
                 "Velocidad Encoder", 0, 12, 0, 260, Color.LTGRAY, Color.LTGRAY);
+        /**
+         * Establece los parámetros necesarios de renderizado.
+         */
         renderer.setXLabels(12);
         renderer.setYLabels(10);
         renderer.setShowGrid(true);
@@ -140,7 +175,9 @@ public class GraphActivity extends Activity {
         renderer.setZoomLimits(new double[] { 0, logGraph, 0, 260 });
 
         dataset = buildDataset(titles, x, values);
-
+        /**
+         * Llamada al método para pintar el gráfico.
+         */
         graphicalView = ChartFactory.getLineChartView(
                 getApplicationContext(), dataset, renderer);
 
@@ -148,6 +185,13 @@ public class GraphActivity extends Activity {
         handler.postDelayed(updateRunnable, 1000);
     }
 
+    /**
+     * Creal el dataset de datos.
+     * @param titles valores a pintar en los títulos.
+     * @param xValues valores del eje x.
+     * @param yValues valores del eje y.
+     * @return dataset datos a pintar.
+     */
     private XYMultipleSeriesDataset buildDataset(String[] titles,
                                                  List<double[]> xValues, List<double[]> yValues) {
         XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
@@ -155,7 +199,14 @@ public class GraphActivity extends Activity {
         return dataset;
     }
 
-    //
+    /**
+     * Establece las series X e Y.
+     * @param dataset pull de datos a pintar.
+     * @param titles valores a pintar en los títulos.
+     * @param xValues valores del eje x.
+     * @param yValues valores del eje y.
+     * @param scale escala de datos a pintar.
+     */
     private void addXYSeries(XYMultipleSeriesDataset dataset, String[] titles,List<double[]> xValues, List<double[]> yValues, int scale) {
         int length = titles.length;
         for (int i = 0; i < length; i++) {
@@ -170,6 +221,12 @@ public class GraphActivity extends Activity {
         }
     }
 
+    /**
+     * Render de datos.
+     * @param colors colores a pintar.
+     * @param styles estilos a establecer.
+     * @return buildRenderer datos renderizados.
+     */
     private XYMultipleSeriesRenderer buildRenderer(int[] colors,
                                                    PointStyle[] styles) {
         XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
@@ -177,6 +234,12 @@ public class GraphActivity extends Activity {
         return renderer;
     }
 
+    /**
+     * Establece el renderizado de datos.
+     * @param renderer datos a renderizar.
+     * @param colors colores a usar.
+     * @param styles estilos a establecer.
+     */
     private void setRenderer(XYMultipleSeriesRenderer renderer, int[] colors,
                              PointStyle[] styles) {
         renderer.setAxisTitleTextSize(16);
@@ -194,6 +257,19 @@ public class GraphActivity extends Activity {
         }
     }
 
+    /**
+     * Establece las propiedades del gráfico.
+     * @param renderer datos a renderizar.
+     * @param title título de la gráfica.
+     * @param xTitle título del eje X.
+     * @param yTitle título del eje Y.
+     * @param xMin valor mínimo del eje X.
+     * @param xMax valor máximo del eje X.
+     * @param yMin valor mínimo del eje Y.
+     * @param yMax valor máximo del eje Y.
+     * @param axesColor colores de los ejes a usar.
+     * @param labelsColor colores de los labels a usar.
+     */
     private void setChartSettings(XYMultipleSeriesRenderer renderer,
                                   String title, String xTitle, String yTitle, double xMin,
                                   double xMax, double yMin, double yMax, int axesColor,

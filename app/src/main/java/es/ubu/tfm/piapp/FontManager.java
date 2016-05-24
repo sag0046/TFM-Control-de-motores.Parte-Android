@@ -7,35 +7,37 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 /**
- * Created by Sandra on 21/02/2016.
+ * Servicios de Bluetooth.
+ * @author    Sandra Ajates González
+ * @version   1.0
  */
 public class FontManager {
 
     /**
-     * The constant ROOT.
+     * Constante ROOT.
      */
     public static final String ROOT = "fonts/",
     /**
-     * The Fontawesome.
+     * libreria Fontawesome.
      */
     FONTAWESOME = ROOT + "fontawesome-webfont.ttf";
 
     /**
-     * Gets typeface.
+     * Retorna el typeface.
      *
-     * @param context the context
-     * @param font    the font
-     * @return the typeface
+     * @param context contexto
+     * @param font    fuente
+     * @return devuelve el typeface
      */
     public static Typeface getTypeface(Context context, String font) {
         return Typeface.createFromAsset(context.getAssets(), font);
     }
 
     /**
-     * Mark as icon container.
+     * Marca como icono contenedor
      *
-     * @param v        the v
-     * @param typeface the typeface
+     * @param v        vista v
+     * @param typeface el typeface
      */
     public static void markAsIconContainer(View v, Typeface typeface) {
         if (v instanceof ViewGroup) {
