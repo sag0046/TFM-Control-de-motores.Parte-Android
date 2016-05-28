@@ -25,19 +25,19 @@ import android.os.Handler;
 import es.ubu.tfm.piapp.R;
 
 /**
- * Actividad de Gráficos, pintará los datos recibidos por el dispositivo Bluetooth.
- * @author    Sandra Ajates González
+ * Actividad de Graficos, pintara los datos recibidos por el dispositivo Bluetooth.
+ * @author    Sandra Ajates Gonzalez
  * @version   1.0
  */
 public class GraphActivity extends Activity {
 
     /**
-     * DEfinición del GraphLayout.
+     * Definicion del GraphLayout.
      */
     private RelativeLayout graphLayout;
 
     /**
-     * Definición tipo gráfico.
+     * Definicion tipo grafico.
      */
     private LineChart mChart;
 
@@ -52,16 +52,16 @@ public class GraphActivity extends Activity {
     private XYMultipleSeriesDataset dataset;
 
     /**
-     * Definición de la vista del gráfico.
+     * Definicion de la vista del grafico.
      */
     private GraphicalView graphicalView;
 
     /**
-     * Obtiene de la clase principal el número de datos para la gráfica.
+     * Obtiene de la clase principal el numero de datos para la grafica.
      */
     private double addX = mainPrinc.getPosEjeX();//30;
     /**
-     * Definición parámetros necesarios.
+     * Definicion parametros necesarios.
      */
     private double plus = 6;
     private double minus = 13;
@@ -72,7 +72,7 @@ public class GraphActivity extends Activity {
     private Handler handler = new Handler();
 
     /**
-     * Instancia el método de ejecución.
+     * Instancia el metodo de ejecucion.
      */
 
     private Runnable updateRunnable = new Runnable() {
@@ -90,7 +90,7 @@ public class GraphActivity extends Activity {
     };
 
     /**
-     * Método onCreate.
+     * Metodo onCreate.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +100,7 @@ public class GraphActivity extends Activity {
         graphLayout = (RelativeLayout) findViewById(R.id.graphLayout);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         /**
-         * Establece los títulos de las dos líneas de datos.
+         * Establece los titulos de las dos lineas de datos.
          */
         String[] titles = new String[] { "Velocidad Real", "Velocidad Deseada" };
         List<double[]> x = new ArrayList<double[]>();
@@ -128,7 +128,7 @@ public class GraphActivity extends Activity {
         //Toast.makeText(getApplicationContext(), "salida" + " " + titles.length, Toast.LENGTH_SHORT).show();
 
         /**
-         * Establece en cada punto del gráfico la velocidad deseada, siempre constante.
+         * Establece en cada punto del grafico la velocidad deseada, siempre constante.
          */
         for (int i=0; i < logGraph; i++) {
             vecValoresEjeY[i] = valor;
@@ -140,11 +140,11 @@ public class GraphActivity extends Activity {
         }
 
         /**
-         * Define los colores de las líneas de los gráficos.
+         * Define los colores de las lineas de los graficos.
          */
         int[] colors = new int[] { Color.BLUE, Color.GREEN };
         /**
-         * Define los puntos de definición de los datos imprimidos.
+         * Define los puntos de definicion de los datos imprimidos.
          */
         PointStyle[] styles = new PointStyle[] { PointStyle.CIRCLE,	PointStyle.DIAMOND };
         /**
@@ -158,12 +158,12 @@ public class GraphActivity extends Activity {
         }
 
         /**
-         * Definición de la leyenda del gráfico.
+         * Definicion de la leyenda del grafico.
          */
         setChartSettings(renderer, "Velocidad", "Tiempo (ms)",
                 "Velocidad Encoder", 0, 12, 0, 260, Color.LTGRAY, Color.LTGRAY);
         /**
-         * Establece los parámetros necesarios de renderizado.
+         * Establece los parametros necesarios de renderizado.
          */
         renderer.setXLabels(12);
         renderer.setYLabels(10);
@@ -176,7 +176,7 @@ public class GraphActivity extends Activity {
 
         dataset = buildDataset(titles, x, values);
         /**
-         * Llamada al método para pintar el gráfico.
+         * Llamada al metodo para pintar el grafico.
          */
         graphicalView = ChartFactory.getLineChartView(
                 getApplicationContext(), dataset, renderer);
@@ -202,7 +202,7 @@ public class GraphActivity extends Activity {
     /**
      * Establece las series X e Y.
      * @param dataset pull de datos a pintar.
-     * @param titles valores a pintar en los títulos.
+     * @param titles valores a pintar en los titulo.
      * @param xValues valores del eje x.
      * @param yValues valores del eje y.
      * @param scale escala de datos a pintar.
@@ -258,15 +258,15 @@ public class GraphActivity extends Activity {
     }
 
     /**
-     * Establece las propiedades del gráfico.
+     * Establece las propiedades del grafico.
      * @param renderer datos a renderizar.
-     * @param title título de la gráfica.
-     * @param xTitle título del eje X.
-     * @param yTitle título del eje Y.
-     * @param xMin valor mínimo del eje X.
-     * @param xMax valor máximo del eje X.
-     * @param yMin valor mínimo del eje Y.
-     * @param yMax valor máximo del eje Y.
+     * @param title titulo de la gráfica.
+     * @param xTitle titulo del eje X.
+     * @param yTitle titulo del eje Y.
+     * @param xMin valor minimo del eje X.
+     * @param xMax valor maximo del eje X.
+     * @param yMin valor minimo del eje Y.
+     * @param yMax valor maximo del eje Y.
      * @param axesColor colores de los ejes a usar.
      * @param labelsColor colores de los labels a usar.
      */

@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 /**
  * Servicios de Bluetooth.
- * @author    Sandra Ajates González
+ * @author    Sandra Ajates Gonzalez
  * @version   1.0
  */
 public class FontManager {

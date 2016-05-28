@@ -29,20 +29,20 @@ import es.ubu.tfm.piapp.modelo.BluetoothService;
 
 /**
  * Actividad principal, desde la que se podra controlar el motor.
- * @author    Sandra Ajates González
+ * @author    Sandra Ajates Gonzalez
  * @version   1.0
  * @see AppCompatActivity
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     /**
-     * Define nombre aplicación.
+     * Define nombre aplicacion.
      */
     private static final String TAG = "PIapp";
     private static final boolean D = true;
 
     /**
-     * Códigos de solicitud de Intent.
+     * Codigos de solicitud de Intent.
      */
     private static final int REQUEST_CONNECT_DEVICE = 1;
     private static final int REQUEST_ENABLE_BT = 2;
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     public static final int MESSAGE_STATE_CHANGE = 1;
     /**
-     * Constante del mensaje leído.
+     * Constante del mensaje leido.
      */
     public static final int MESSAGE_READ = 2;
     /**
@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     public static double [] vecValoresEjeX = new double[2000];
     /**
-     * The constant posEjeX.
+     * Constante posEjeX.
      */
     public static int posEjeX=0;
     /**
@@ -126,29 +126,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static boolean deviceConnected=false;
 
     /**
-     * Definición del objeto BluetoothService.
+     * Definicion del objeto BluetoothService.
      */
     private BluetoothService mService = null;
 
     /**
-     * Definición del objeto BluetoothAdapter.
+     * Definicion del objeto BluetoothAdapter.
      */
     private BluetoothAdapter mBluetoothAdapter = null;
     /**
-     * Definición del dispositivo conectado.
+     * Definicion del dispositivo conectado.
      */
     private String mConnectedDeviceName = null;
     /**
-     * Definición del RadioGroup.
+     * Definicion del RadioGroup.
      */
     private RadioGroup radioGroupMio;
     /**
-     * Definición del RadioButton.
+     * Definicion del RadioButton.
      */
     private RadioButton radioButtonMio;
 
     /**
-     * Definición onCreate.
+     * Definicion onCreate.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         */
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         /**
-         * Si el Bluetooth no está activo, requiere su activación.
+         * Si el Bluetooth no esta activo, requiere su activacion.
          */
         if (!mBluetoothAdapter.isEnabled()) {
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -174,21 +174,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         /**
-         * Instanciación del botón play.
+         * Instanciacion del boton play.
          */
         Button btnPlay = (Button)findViewById(R.id.play);
         /**
-         * Instanciación del botón stop.
+         * Instanciacion del boton stop.
          */
         Button btnStop = (Button)findViewById(R.id.stop);
 
 
         /**
-         * Creación del listerner del botón play.
+         * Creacion del listerner del boton play.
          */
         btnPlay.setOnClickListener(this);
         /**
-         * Creación del listerner del botón stop.
+         * Creacion del listerner del boton stop.
          */
         btnStop.setOnClickListener(this);
 
@@ -207,19 +207,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Creación del onClick.
+     * Creacion del onClick.
      */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             /**
-             * Acción al pulsar el botón play.
+             * Accion al pulsar el boton play.
              */
             case (R.id.play):
                 move(MOVE_PLAY);
                 break;
             /**
-             * Acción al pulsar el botón stop.
+             * Accion al pulsar el boton stop.
              */
             case (R.id.stop):
                 move(MOVE_STOP);
@@ -235,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void elegirAlgoritmo(View v) {
         switch(v.getId()) {
             /**
-             * Acción al elegir la opción del algoritmo integral.
+             * Accion al elegir la opción del algoritmo integral.
              */
             case R.id.rdIntegral:
                 findViewById(R.id.txtVelocidad).setEnabled(true);
@@ -246,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ((EditText)findViewById(R.id.txtConstanteP)).setText("");
                 break;
             /**
-             * Acción al elegir la opción del algoritmo integral.
+             * Accion al elegir la opción del algoritmo integral.
              */
             case R.id.rdProporcional:
                 findViewById(R.id.txtVelocidad).setEnabled(true);
@@ -270,11 +270,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Lanza la conexión Bluetooth.
+     * Lanza la conexion Bluetooth.
      */
     public void lanzarBT() {
         /**
-         * Si la conexión Bluetooth esta deshabilitada pide su inicio.
+         * Si la conexion Bluetooth esta deshabilitada pide su inicio.
          */
         if (!mBluetoothAdapter.isEnabled()) {
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -288,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     /**
-     * Lanza la instancia de GraphActivity para pintar el gráfico.
+     * Lanza la instancia de GraphActivity para pintar el grafico.
      */
     public void lanzarGR() {
         /**
@@ -303,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Pausado de la sincronización.
+     * Pausado de la sincronizacion.
      */
     @Override
     public synchronized void onPause() {
@@ -312,7 +312,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Parada de la sincronización.
+     * Parada de la sincronizacion.
      */
     @Override
     public void onStop() {
@@ -321,7 +321,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Método onDestroy.
+     * Metodo onDestroy.
      */
     @Override
     public void onDestroy() {
@@ -332,7 +332,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Método que establece el moviento a realizar.
+     * Metodo que establece el moviento a realizar.
      * @param movement movimiento seleccionado.
      */
     private void move (int movement){
@@ -369,7 +369,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Método para enviar el mensaje de parada del motor.
+     * Metodo para enviar el mensaje de parada del motor.
      */
     private void stopMotor() {
         message = "S";
@@ -378,13 +378,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
          */
         byte[] send = message.getBytes();
         /**
-         * Envía el mensaje por Bluetooth.
+         * Envia el mensaje por Bluetooth.
          */
         mService.write(send);
     }
 
     /**
-     * Método para seleccionar el algoritmo a enviar.
+     * Metodo para seleccionar el algoritmo a enviar.
      * @param algoritmo valor seleccionado
      */
     private void seleccionAlgoritmo(int algoritmo) {
@@ -403,7 +403,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Método para establecer los parámetros asociados al algoritmo proporcional.
+     * Metodo para establecer los parametros asociados al algoritmo proporcional.
      */
     private void algoritmoProporcional() {
         /**
@@ -443,7 +443,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         message = "P" + passToString(speed) + passToString(k_P);
 
-        // Reseteo variable posición Array datos a recibir por Bluetooth
+        // Reseteo variable posicion Array datos a recibir por Bluetooth
         setPosEjeX();
         // Obtenemos la cadena de bytes a enviar
         byte[] send = message.getBytes();
@@ -456,7 +456,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Método para establecer los parámetros asociados al algoritmo integral.
+     * Metodo para establecer los parametros asociados al algoritmo integral.
      */
     private void algoritmoIntegral() {
         /**
@@ -518,7 +518,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //Toast toast1 = Toast.makeText(getApplicationContext(), send.toString(), Toast.LENGTH_SHORT);
         //toast1.show();
 
-        // Reseteo variable posición Array datos a recibir por Bluetooth
+        // Reseteo variable posicion Array datos a recibir por Bluetooth
         setPosEjeX();
 
         // Enviamos el mensaje
@@ -526,7 +526,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Método que valida que el valor recibido esté dentro del rango establecido.
+     * Metodo que valida que el valor recibido este dentro del rango establecido.
      *
      * @param valor entero a validar.
      * @param mensaje indicador asociado al texto a mostrar en caso de no estar comprendido en el rango.
@@ -543,7 +543,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     /**
-     * Método que parsea el valor a enviar por Bluetooth.
+     * Metodo que parsea el valor a enviar por Bluetooth.
      *
      * @param value entero a parsear.
      * @return retorna el valor parseado.
@@ -559,7 +559,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Método que recibe información de BluetoothService.
+     * Metodo que recibe informacion de BluetoothService.
      */
     private final Handler mHandler = new Handler() {
         @Override
@@ -607,7 +607,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     };
 
     /**
-     * Método que establece el estado conectado en el subtítulo.
+     * Método que establece el estado conectado en el subtitulo.
      */
     private final void setEstadoConectado() {
         getSupportActionBar().setSubtitle(Html.fromHtml("<small>" + getString(R.string.conectado_a) + mConnectedDeviceName + "</small>"));
@@ -678,23 +678,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Establecela posición 0 para el eje X.
+     * Establece la posicion 0 para el eje X.
      */
     public void setPosEjeX() {
         posEjeX=0;
     }
 
     /**
-     * Obtiene la última posición de datos recibidos.
+     * Obtiene la ultima posicion de datos recibidos.
      *
-     * @return la última posición rellena del vector de datos
+     * @return la ultima posicion rellena del vector de datos
      */
     public static int getPosEjeX() {
         return posEjeX;
     }
 
     /**
-     * Establece el estado conexión a NO conectado.
+     * Establece el estado conexion a NO conectado.
      */
     public static void setEstadoConexion(){
         deviceConnected=false;
@@ -703,18 +703,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * Método onCreateOptionsMenu.
      *
-     * @param menu pinta el menú en la parte superior de la aplicación.
+     * @param menu pinta el menu en la parte superior de la aplicación.
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.mn_activity_bar, menu);
         return true;
     }
 
     /**
      * Método onOptionsItemSelected.
-     * Establece la acción a realizar en función del item seleccionado.
+     * Establece la accion a realizar en funcion del item seleccionado.
      *
      * @param item seleccionado.
      */

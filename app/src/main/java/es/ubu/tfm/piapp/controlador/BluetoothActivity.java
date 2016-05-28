@@ -36,7 +36,7 @@ import es.ubu.tfm.piapp.R;
 
 /**
  * Actividad de Bluetooth.
- * @author    Sandra Ajates González
+ * @author    Sandra Ajates Gonzalez
  * @version   1.0
  */
 public class BluetoothActivity extends AppCompatActivity {
@@ -50,24 +50,24 @@ public class BluetoothActivity extends AppCompatActivity {
     private static final boolean D = true;
 
     /**
-     * Constante con el nombre de la dirección.
+     * Constante con el nombre de la direccion.
      */
     public static String EXTRA_DEVICE_ADDRESS = "device_address";
     /**
-     * Definición adaptador Bluetooth.
+     * Definicion adaptador Bluetooth.
      */
     private BluetoothAdapter mBtAdapter;
     /**
-     * Definición dispositivos emparejados.
+     * Definicion dispositivos emparejados.
      */
     private ArrayAdapter<String> mPairedDevicesArrayAdapter;
     /**
-     * Definición dispositivos nuevos.
+     * Definicion dispositivos nuevos.
      */
     private ArrayAdapter<String> mNewDevicesArrayAdapter;
 
     /**
-     * Método onCreate.
+     * Metodo onCreate.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +77,7 @@ public class BluetoothActivity extends AppCompatActivity {
          */
         setContentView(R.layout.bt_activity);
         /**
-         * Establece la orientación de la pantalla.
+         * Establece la orientacion de la pantalla.
          */
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         /**
@@ -92,7 +92,7 @@ public class BluetoothActivity extends AppCompatActivity {
         FontManager.markAsIconContainer(findViewById(R.id.btnActivar), iconFont);
 
         /**
-         * Pînta los botones del bar de la parte superior.
+         * Pinta los botones del bar de la parte superior.
          */
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(ContextCompat.getDrawable(this, R.drawable.ic_logo_ubu));
@@ -100,7 +100,7 @@ public class BluetoothActivity extends AppCompatActivity {
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         /**
-         * Inicializa el boton qe permite descubrir nuevos dispositivos.
+         * Inicializa el boton que permite descubrir nuevos dispositivos.
          */
         Button scanButton = (Button) findViewById(R.id.btnActivar);
         scanButton.setOnClickListener(new View.OnClickListener() {
@@ -169,14 +169,14 @@ public class BluetoothActivity extends AppCompatActivity {
     }
 
     /**
-     * Método onDestroy.
+     * Metodo onDestroy.
      */
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
         /**
-         * Valida de que no realice más búsquedas.
+         * Valida de que no realice mas busquedas.
          */
         if (mBtAdapter != null) {
             mBtAdapter.cancelDiscovery();
@@ -195,7 +195,7 @@ public class BluetoothActivity extends AppCompatActivity {
         if (D) Log.d(TAG, "doDiscovery()");
 
         /**
-         * Actualiza el título a escaneando.
+         * Actualiza el titulo a escaneando.
          */
         setProgressBarIndeterminateVisibility(true);
         getSupportActionBar().setSubtitle(getString(R.string.scanning));
@@ -206,7 +206,7 @@ public class BluetoothActivity extends AppCompatActivity {
         findViewById(R.id.lblnuevosDispositivos).setVisibility(View.VISIBLE);
 
         /**
-         * En el caso de que este realizando la búsqueda, se para.
+         * En el caso de que este realizando la busqueda, se para.
          */
         if (mBtAdapter.isDiscovering()) {
             mBtAdapter.cancelDiscovery();
@@ -225,7 +225,7 @@ public class BluetoothActivity extends AppCompatActivity {
     private OnItemClickListener mDeviceClickListener = new OnItemClickListener() {
         public void onItemClick(AdapterView<?> av, View v, int arg2, long arg3) {
             /**
-             * Cancela el descubrimiento de dispositivos ya que se va a producir el enlace a continuación.
+             * Cancela el descubrimiento de dispositivos ya que se va a producir el enlace a continuacion.
              */
             mBtAdapter.cancelDiscovery();
 
@@ -236,7 +236,7 @@ public class BluetoothActivity extends AppCompatActivity {
             String address = info.substring(info.length() - 17);
 
             /**
-             * Crea el Intent resultante y añade la dirección MAC.
+             * Crea el Intent resultante y añade la direccion MAC.
              */
             Intent intent = new Intent();
             intent.putExtra(EXTRA_DEVICE_ADDRESS, address);
@@ -256,7 +256,7 @@ public class BluetoothActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             /**
-             * Obtiene la acción.
+             * Obtiene la accion.
              */
             String action = intent.getAction();
 
@@ -276,7 +276,7 @@ public class BluetoothActivity extends AppCompatActivity {
                 }
 
                 /**
-                 * Cuando la busqueda finaliza cambia el título.
+                 * Cuando la busqueda finaliza cambia el titulo.
                  */
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 setProgressBarIndeterminateVisibility(false);
@@ -293,8 +293,8 @@ public class BluetoothActivity extends AppCompatActivity {
     };
 
     /**
-     * Método para hacer visible el menú.
-     * @param menu el menú a hacer visible.
+     * Método para hacer visible el menu.
+     * @param menu el menu a hacer visible.
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -306,20 +306,20 @@ public class BluetoothActivity extends AppCompatActivity {
     }
 
     /**
-     * Método para interactuar cuando se selecciona un item del menú.
+     * Metodo para interactuar cuando se selecciona un item del menú.
      * @param item botón seleccionado.
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             /**
-             * Si el botón pulsado es la flecha, volverá al menú principal.
+             * Si el boton pulsado es la flecha, volverá al menú principal.
              */
             case R.id.menu_atras:
                 this.finish();
                 return true;
             /**
-             * Si el botón pulsado es el caracter i, mostrará la inforamción de la aplicación.
+             * Si el boton pulsado es el caracter i, mostrara la inforamción de la aplicacion.
              */
             case R.id.menu_info:
                 // Mostramos dialogo con la información de la aplicación

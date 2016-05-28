@@ -19,23 +19,23 @@ import es.ubu.tfm.piapp.R;
 
 /**
  * Servicios de Bluetooth.
- * @author    Sandra Ajates González
+ * @author    Sandra Ajates Gonzalez
  * @version   1.0
  */
 public class BluetoothService {
 
     /**
-     * Constante con el nombre de la aplicación.
+     * Constante con el nombre de la aplicacion.
      */
     private static final String TAG = "PIapp";
 
     /**
-     * Constante booleana de estado conexión.
+     * Constante booleana de estado conexion.
      */
     private static final boolean D = true;
 
     /**
-     * Constante con el Identificador unico UUID para esta aplicación.
+     * Constante con el Identificador unico UUID para esta aplicacion.
      */
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
 
@@ -47,7 +47,7 @@ public class BluetoothService {
     /**
      * The constant STATE_CONNECTING: estado conexion actual saliente.
      */
-    public static final int STATE_CONNECTING = 1; // ahora inicializando una conexión saliente
+    public static final int STATE_CONNECTING = 1; // ahora inicializando una conexion saliente
 
     /**
      * The constant STATE_CONNECTED: estado conexion actual conectado dsipositivo.
@@ -68,25 +68,25 @@ public class BluetoothService {
      */
     private final BluetoothAdapter mAdapter; //adaptador BT
     /**
-     * Handler de la aplicación.
+     * Handler de la aplicacion.
      */
     private final Handler mHandler; //Handler
     /**
-     * Estado de la conexión.
+     * Estado de la conexion.
      */
     private int mState;//estado
 
     /**
-     * Importación objeto MainActivity.
+     * Importacion objeto MainActivity.
      */
     private MainActivity mainPrinc = new MainActivity();
 
 
     /**
-     * Instanciar una nueva sesión tipo Bluetooth.
+     * Instanciar una nueva sesion tipo Bluetooth.
      *
      * @param context conexión de Bluetooth
-     * @param handler handler de conexión
+     * @param handler handler de conexion
      */
     public BluetoothService(Context context, Handler handler) {
         mAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -95,9 +95,9 @@ public class BluetoothService {
     }
 
     /**
-     * Establece el estado de conexión actual.
+     * Establece el estado de conexion actual.
      *
-     * @param state estado de la conexión
+     * @param state estado de la conexion
      */
     private synchronized void setState(int state) {
         if (D) Log.d(TAG, "setState() " + mState + " -> " + state);
@@ -108,9 +108,9 @@ public class BluetoothService {
     }
 
     /**
-     * Retorna el estado de la conexión.
+     * Retorna el estado de la conexion.
      *
-     * @return estado actual de la conexión
+     * @return estado actual de la conexion
      */
     public synchronized int getState() {
         return mState;
@@ -132,7 +132,7 @@ public class BluetoothService {
     }
 
     /**
-     * Iniciliza una conexión a un dispositivo remoto.
+     * Iniciliza una conexion a un dispositivo remoto.
      *
      * @param device dispositivo Bluetooth a conectarse
      */
@@ -205,7 +205,7 @@ public class BluetoothService {
     }
 
     /**
-     * Envío del mensaje por conexión Bluetooth.
+     * Envio del mensaje por conexión Bluetooth.
      *
      * @param out cadena de caracteres a enviar por Bluetooth
      */
@@ -225,7 +225,7 @@ public class BluetoothService {
 
 
     /**
-     * Indica que la conexión ha fallado y se lo comunica a la actividad de la interfaz de usuario.
+     * Indica que la conexion ha fallado y se lo comunica a la actividad de la interfaz de usuario.
      */
          private void connectionFailed() {
         // Envia un mensaje de fallo de vuelta a la actividad de que no se ha podido enviar
@@ -241,7 +241,7 @@ public class BluetoothService {
 
 
     /**
-     * Indica que la conexión se ha perdido y se lo comunica a la UI Activity (actividad de la interfaz de usuario).
+     * Indica que la conexion se ha perdido y se lo comunica a la UI Activity (actividad de la interfaz de usuario).
      */
     private void connectionLost() {
         // Envia un mensaje de que se ha perdido la conexion
@@ -258,14 +258,14 @@ public class BluetoothService {
     }
 
     /**
-     * Este hilo se ejecuta al intentar realizar una conexión de salida con un dispositivo.
+     * Este hilo se ejecuta al intentar realizar una conexion de salida con un dispositivo.
      */
     private class ConnectThread extends Thread {
         private final BluetoothSocket mmSocket;
         private final BluetoothDevice mmDevice; //dispositivo BT
 
         /**
-         * Instancia una nueva conexión de Threads.
+         * Instancia una nueva conexion de Threads.
          *
          * @param device dispositivo a conectarse
          */
@@ -284,7 +284,7 @@ public class BluetoothService {
         }
 
         /**
-         * Lanza la conexión de Bluetooth.
+         * Lanza la conexion de Bluetooth.
          */
         @Override
         public void run() {
@@ -293,9 +293,9 @@ public class BluetoothService {
             //Siempre cancelar descubrimiento porque va a reducir la velocidad de una conexión
             mAdapter.cancelDiscovery();
 
-            // Hacemos una conexión al BluetoothSocket
+            // Hacemos una conexion al BluetoothSocket
             try {
-                // Esta es una llamada de bloqueo y sólo regresará
+                // Esta es una llamada de bloqueo y solo regresara
                 // en una conexión correcta o una excepción
                 mmSocket.connect();
             } catch (IOException e) {
@@ -320,7 +320,7 @@ public class BluetoothService {
         }
 
         /**
-         * Cancela la conexión.
+         * Cancela la conexion.
          */
         public void cancel() {
             try {
@@ -333,7 +333,7 @@ public class BluetoothService {
 
 
     /**
-     * Lanza el hilo se ejecuta durante una conexión con un dispositivo remoto.
+     * Lanza el hilo se ejecuta durante una conexion con un dispositivo remoto.
      */
     private class ConnectedThread extends Thread {
         private final BluetoothSocket mmSocket; //Socket BT
@@ -362,7 +362,7 @@ public class BluetoothService {
             mmOutStream = tmpOut;
         }
         /**
-         * Lanza la conexión.
+         * Lanza la conexion.
          */
         @Override
         public void run() {
@@ -389,7 +389,7 @@ public class BluetoothService {
         }
 
         /**
-         * Envía por Bluetooth el mensaje.
+         * Envia por Bluetooth el mensaje.
          *
          * @param buffer mensaje a enviar por Bluetooth
          */
@@ -403,7 +403,7 @@ public class BluetoothService {
         }
 
         /**
-         * Cancela la conexión.
+         * Cancela la conexion.
          */
         public void cancel() {
             try {
